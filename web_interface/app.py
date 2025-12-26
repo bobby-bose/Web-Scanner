@@ -100,12 +100,12 @@ except Exception as e:
     logger.error(f"Database initialization failed: {e}", exc_info=True)
 
 # Global scan storage
-active_scans: Dict[str, 'DirectScanner'] = {}
+active_scans: Dict[str, Any] = {}
 scan_history: List[Dict[str, Any]] = []
 scan_results: Dict[str, List[Dict[str, Any]]] = {}
 
 # Global state for active recon runs
-active_recons: Dict[str, ReconRunner | ReconFTWRunner] = {}
+active_recons: Dict[str, Any] = {}
 
 # Global state for recon preparation
 recon_preparing = False
