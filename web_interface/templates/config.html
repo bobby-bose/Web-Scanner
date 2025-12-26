@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration - Web-ScannerAdmin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #7c3aed;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .sidebar-header h3 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-header .subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-top: 0.25rem;
+        }
+
+        .sidebar-menu {
+            padding: 1.5rem 0;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content-header p {
+            color: #6b7280;
+            margin: 0.5rem 0 0 0;
+            font-size: 1.125rem;
+        }
+
+        .config-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .config-section {
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .config-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .config-section h5 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .config-section h5 i {
+            color: var(--primary-color);
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+            background: white;
+        }
+
+        .form-text {
+            color: #6b7280;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        .btn {
+            border-radius: 0.5rem;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-outline-secondary {
+            border: 2px solid var(--border-color);
+            color: var(--dark-color);
+            background: transparent;
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--border-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .alert {
+            border-radius: 0.75rem;
+            border: none;
+            padding: 1rem 1.5rem;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.1));
+            color: var(--success-color);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.1));
+            color: var(--danger-color);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .row.g-3 {
+            margin-bottom: 1rem;
+        }
+
+        .input-group-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 4rem;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .content-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tooltip-icon {
+            color: var(--primary-color);
+            cursor: help;
+            margin-left: 0.25rem;
+        }
+
+        .config-value {
+            font-family: 'Courier New', monospace;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-online {
+            background: var(--success-color);
+            animation: pulse 2s infinite;
+        }
+
+        .status-offline {
+            background: var(--danger-color);
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-search"></i> Web-Scanner</h3>
+            <div class="subtitle">Admin Dashboard</div>
+        </div>
+        <div class="sidebar-menu">
+            <div class="nav-item">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/scan" class="nav-link">
+                    <i class="fas fa-crosshairs"></i>
+                    New Scan
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/history" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    Scan History
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-header fade-in">
+            <h1>Configuration</h1>
+            <p>Manage Web-Scanner settings and preferences</p>
+        </div>
+
+        <!-- Alert Container -->
+        <div id="alertContainer"></div>
+
+        <!-- Configuration Container -->
+        <div class="config-container fade-in">
+            <form id="configForm">
+                <!-- General Settings -->
+                <div class="config-section">
+                    <h5><i class="fas fa-cogs"></i> General Settings</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="thread_count" class="form-label">
+                                Thread Count
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Number of concurrent threads for scanning"></i>
+                            </label>
+                            <input type="number" class="form-control" id="thread_count" name="thread_count" min="1" max="200" value="25">
+                            <div class="form-text">Higher values increase speed but may trigger detection</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="timeout" class="form-label">
+                                Request Timeout (seconds)
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Timeout for HTTP requests"></i>
+                            </label>
+                            <input type="number" class="form-control" id="timeout" name="timeout" min="1" max="300" value="10">
+                            <div class="form-text">Time to wait for server response</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="delay" class="form-label">
+                                Delay Between Requests (seconds)
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Delay between consecutive requests"></i>
+                            </label>
+                            <input type="number" class="form-control" id="delay" name="delay" min="0" step="0.1" value="0">
+                            <div class="form-text">Add delay to avoid detection</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="max_retries" class="form-label">
+                                Maximum Retries
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Maximum number of retry attempts"></i>
+                            </label>
+                            <input type="number" class="form-control" id="max_retries" name="max_retries" min="0" max="10" value="1">
+                            <div class="form-text">Retry failed requests</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scanning Settings -->
+                <div class="config-section">
+                    <h5><i class="fas fa-crosshairs"></i> Scanning Settings</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="recursive" class="form-label">
+                                Recursive Scanning
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Enable recursive directory scanning"></i>
+                            </label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="recursive" name="recursive">
+                                <label class="form-check-label" for="recursive">
+                                    Enable recursive scanning
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recursion_depth" class="form-label">
+                                Recursion Depth
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Maximum depth for recursive scanning"></i>
+                            </label>
+                            <input type="number" class="form-control" id="recursion_depth" name="recursion_depth" min="1" max="10" value="3">
+                            <div class="form-text">How deep to scan recursively</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="follow_redirects" class="form-label">
+                                Follow Redirects
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Follow HTTP redirects"></i>
+                            </label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="follow_redirects" name="follow_redirects">
+                                <label class="form-check-label" for="follow_redirects">
+                                    Follow HTTP redirects
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="async_mode" class="form-label">
+                                Async Mode
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Use async mode for faster scanning"></i>
+                            </label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="async_mode" name="async_mode">
+                                <label class="form-check-label" for="async_mode">
+                                    Enable async mode (experimental)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Time Limits -->
+                <div class="config-section">
+                    <h5><i class="fas fa-clock"></i> Time Limits</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="max_time" class="form-label">
+                                Maximum Scan Time (seconds)
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Maximum time for entire scan"></i>
+                            </label>
+                            <input type="number" class="form-control" id="max_time" name="max_time" min="0" value="0">
+                            <div class="form-text">0 = no limit</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="target_max_time" class="form-label">
+                                Target Maximum Time (seconds)
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Maximum time per target"></i>
+                            </label>
+                            <input type="number" class="form-control" id="target_max_time" name="target_max_time" min="0" value="0">
+                            <div class="form-text">0 = no limit</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Status -->
+                <div class="config-section">
+                    <h5><i class="fas fa-server"></i> System Status</h5>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Web-ScannerIntegration</h6>
+                                    <small class="text-muted">Module status and connectivity</small>
+                                </div>
+                                <div>
+                                    <span class="status-indicator status-online"></span>
+                                    <span>Online</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Wordlists Available</h6>
+                                    <small class="text-muted">Number of wordlist files</small>
+                                </div>
+                                <div>
+                                    <span id="wordlistCount" class="config-value">Loading...</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="mb-1">Active Scans</h6>
+                                    <small class="text-muted">Currently running scans</small>
+                                </div>
+                                <div>
+                                    <span id="activeScansCount" class="config-value">0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Save Configuration
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="testConfiguration()">
+                        <i class="fas fa-play"></i> Test Configuration
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="resetConfiguration()">
+                        <i class="fas fa-undo"></i> Reset to Defaults
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function showAlert(message, type = 'success') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            alertContainer.appendChild(alert);
+            
+            // Auto-dismiss after 5 seconds
+            setTimeout(() => {
+                if (alert.parentNode) {
+                    alert.remove();
+                }
+            }, 5000);
+        }
+
+        async function loadConfiguration() {
+            try {
+                const response = await fetch('/api/config');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    const config = data.config;
+                    
+                    // Update form fields
+                    Object.keys(config).forEach(key => {
+                        const element = document.getElementById(key);
+                        if (element) {
+                            if (element.type === 'checkbox') {
+                                element.checked = config[key];
+                            } else {
+                                element.value = config[key];
+                            }
+                        }
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading configuration:', error);
+                showAlert('Error loading configuration', 'danger');
+            }
+        }
+
+        async function saveConfiguration(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const config = {};
+            
+            for (let [key, value] of formData.entries()) {
+                const element = document.getElementById(key);
+                if (element.type === 'checkbox') {
+                    config[key] = element.checked;
+                } else if (element.type === 'number') {
+                    config[key] = parseInt(value) || 0;
+                } else {
+                    config[key] = value;
+                }
+            }
+            
+            try {
+                const response = await fetch('/api/config', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(config)
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    showAlert('Configuration saved successfully!', 'success');
+                } else {
+                    showAlert('Error saving configuration: ' + data.message, 'danger');
+                }
+            } catch (error) {
+                console.error('Error saving configuration:', error);
+                showAlert('Error saving configuration', 'danger');
+            }
+        }
+
+        function testConfiguration() {
+            showAlert('Testing configuration... (Feature coming soon)', 'success');
+        }
+
+        function resetConfiguration() {
+            if (confirm('Are you sure you want to reset all settings to defaults?')) {
+                loadConfiguration(); // Reload from server defaults
+                showAlert('Configuration reset to defaults', 'success');
+            }
+        }
+
+        async function updateSystemStatus() {
+            try {
+                // Get wordlist count
+                const wordlistResponse = await fetch('/api/wordlists');
+                const wordlistData = await wordlistResponse.json();
+                if (wordlistData.status === 'success') {
+                    document.getElementById('wordlistCount').textContent = wordlistData.wordlists.length;
+                }
+                
+                // Get active scans count
+                const scansResponse = await fetch('/api/scan/list');
+                const scansData = await scansResponse.json();
+                if (scansData.status === 'success') {
+                    const runningScans = scansData.scans.filter(scan => scan.status === 'running').length;
+                    document.getElementById('activeScansCount').textContent = runningScans;
+                }
+            } catch (error) {
+                console.error('Error updating system status:', error);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfiguration();
+            updateSystemStatus();
+            document.getElementById('configForm').addEventListener('submit', saveConfiguration);
+            
+            // Update system status every 10 seconds
+            setInterval(updateSystemStatus, 10000);
+            
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>

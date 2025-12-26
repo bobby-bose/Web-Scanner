@@ -1,0 +1,41 @@
+2025-12-26 13:05:59,916 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 13:06:02,533 - Web-Scanner_web - INFO - <module>:84 - Database initialized successfully
+2025-12-26 13:06:02,537 - Web-Scanner_web - INFO - <module>:513 - Starting Flask development server - Direct Scan Mode
+2025-12-26 13:06:03,392 - Web-Scanner_web - INFO - <module>:517 - Database initialized successfully
+2025-12-26 13:06:05,296 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 13:06:07,051 - Web-Scanner_web - INFO - <module>:84 - Database initialized successfully
+2025-12-26 13:06:07,055 - Web-Scanner_web - INFO - <module>:513 - Starting Flask development server - Direct Scan Mode
+2025-12-26 13:06:08,016 - Web-Scanner_web - INFO - <module>:517 - Database initialized successfully
+2025-12-26 13:06:09,133 - Web-Scanner_web - DEBUG - index_function:268 - Dashboard page requested
+2025-12-26 13:06:11,817 - Web-Scanner_web - DEBUG - scan_page_function:274 - Scan page requested
+2025-12-26 13:06:25,292 - Web-Scanner_web - INFO - start_scan_function:301 - Start scan API called
+2025-12-26 13:06:25,304 - Web-Scanner_web - INFO - start_scan_function:304 - Start scan API called with config: {'resource_level': 'low', 'url': 'https://www.quora.com/', 'http_method': 'GET', 'wordlist': 'db/400_blacklist.txt', 'extensions': 'php,asp,aspx,jsp,html', 'threads': '5', 'timeout': '10', 'delay': '0', 'max_retries': '1', 'max_time': '0', 'recursive': False, 'async_mode': False}
+2025-12-26 13:06:25,304 - Web-Scanner_web - INFO - start_scan_function:313 - Created direct scanner scan_1766734585_7549
+2025-12-26 13:06:25,304 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Starting direct scan execution
+2025-12-26 13:06:25,304 - Web-Scanner_web - INFO - start_scan_function:329 - Direct scanner scan_1766734585_7549 thread started
+2025-12-26 13:06:25,304 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Step 1: Importing required modules
+2025-12-26 13:06:25,343 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Imported options and blacklists
+2025-12-26 13:06:25,369 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Imported settings
+2025-12-26 13:06:25,370 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Basic options configured
+2025-12-26 13:06:25,370 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Step 2: Setting up dictionary
+2025-12-26 13:06:25,463 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Dictionary loaded with 9 entries
+2025-12-26 13:06:25,463 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Step 3: Setting up requester
+2025-12-26 13:06:27,493 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Requester setup for https://www.quora.com/
+2025-12-26 13:06:27,493 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Step 5: Starting actual path scanning
+2025-12-26 13:06:29,066 - Web-Scanner_web - INFO - log_debug:118 - Scanner scan_1766734585_7549: Scan completed - Found 0 paths in 3.76s
+2025-12-26 13:06:35,147 - Web-Scanner_web - DEBUG - history_page_function:280 - History page requested
+2025-12-26 13:08:12,712 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 13:08:14,676 - Web-Scanner_web - INFO - <module>:84 - Database initialized successfully
+2025-12-26 13:08:14,679 - Web-Scanner_web - INFO - <module>:513 - Starting Flask development server - Direct Scan Mode
+2025-12-26 13:08:15,560 - Web-Scanner_web - INFO - <module>:517 - Database initialized successfully
+2025-12-26 13:08:17,312 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 13:09:46,978 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 13:09:52,656 - Web-Scanner_web - INFO - <module>:84 - Database initialized successfully
+2025-12-26 13:09:52,660 - Web-Scanner_web - INFO - <module>:542 - Starting Flask development server - Direct Scan Mode
+2025-12-26 13:09:57,523 - Web-Scanner_web - INFO - <module>:546 - Database initialized successfully
+2025-12-26 13:09:59,179 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 13:10:04,087 - Web-Scanner_web - INFO - <module>:84 - Database initialized successfully
+2025-12-26 13:10:04,091 - Web-Scanner_web - INFO - <module>:542 - Starting Flask development server - Direct Scan Mode
+2025-12-26 13:10:09,011 - Web-Scanner_web - INFO - <module>:546 - Database initialized successfully
+2025-12-26 13:10:09,058 - Web-Scanner_web - DEBUG - index_function:268 - Dashboard page requested
+2025-12-26 13:10:11,729 - Web-Scanner_web - DEBUG - history_page_function:280 - History page requested

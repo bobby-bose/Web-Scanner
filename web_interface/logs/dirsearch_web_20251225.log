@@ -1,0 +1,288 @@
+2025-12-25 09:47:18,345 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636226_3562: Scanned 40/100 paths
+2025-12-25 09:47:21,252 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636226_3562: Scanned 50/100 paths
+2025-12-25 09:47:24,232 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636226_3562: Scanned 60/100 paths
+2025-12-25 09:47:27,478 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636226_3562: Scanned 70/100 paths
+2025-12-25 09:47:30,327 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636226_3562: Scanned 80/100 paths
+2025-12-25 09:47:33,180 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636226_3562: Scanned 90/100 paths
+2025-12-25 09:47:36,030 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636226_3562: Scanned 100/100 paths
+2025-12-25 09:47:36,031 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636226_3562: Scan completed - Found 2 paths in 29.80s
+2025-12-25 09:47:51,524 - Web-Scanner_web - INFO - <module>:59 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 09:47:51,528 - Web-Scanner_web - INFO - <module>:373 - Starting Flask development server - Direct Scan Mode
+2025-12-25 09:48:37,853 - Web-Scanner_web - DEBUG - scan_page_function:233 - Scan page requested
+2025-12-25 09:48:42,019 - Web-Scanner_web - INFO - start_scan_function:252 - Start scan API called
+2025-12-25 09:48:42,019 - Web-Scanner_web - INFO - start_scan_function:255 - Start scan API called with config: {'resource_level': 'low', 'url': 'https://www.shodan.io', 'http_method': 'GET', 'wordlist': 'db/dicc.txt', 'extensions': 'php,asp,aspx,jsp,html', 'threads': '5', 'timeout': '10', 'delay': '0', 'max_retries': '1', 'max_time': '0', 'recursive': False, 'async_mode': False}
+2025-12-25 09:48:42,020 - Web-Scanner_web - INFO - start_scan_function:264 - Created direct scanner scan_1766636322_8275
+2025-12-25 09:48:42,020 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Starting direct scan execution
+2025-12-25 09:48:42,020 - Web-Scanner_web - INFO - start_scan_function:279 - Direct scanner scan_1766636322_8275 thread started
+2025-12-25 09:48:42,020 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Step 1: Importing required modules
+2025-12-25 09:48:42,022 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Imported options and blacklists
+2025-12-25 09:48:42,025 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Imported settings
+2025-12-25 09:48:42,025 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Basic options configured
+2025-12-25 09:48:42,025 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Step 2: Setting up dictionary
+2025-12-25 09:48:42,049 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Dictionary loaded with 9120 entries
+2025-12-25 09:48:42,049 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Step 3: Setting up requester
+2025-12-25 09:48:42,435 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Requester setup for https://www.shodan.io
+2025-12-25 09:48:42,436 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Step 5: Starting actual path scanning
+2025-12-25 09:48:44,717 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: FOUND: %C0%AE%C0%AE%C0%AF - 200
+2025-12-25 09:48:45,064 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: FOUND: %ff - 200
+2025-12-25 09:48:45,331 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 10/100 paths
+2025-12-25 09:48:47,703 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 20/100 paths
+2025-12-25 09:48:50,372 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 30/100 paths
+2025-12-25 09:48:52,845 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 40/100 paths
+2025-12-25 09:48:55,532 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 50/100 paths
+2025-12-25 09:48:58,313 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 60/100 paths
+2025-12-25 09:49:00,772 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 70/100 paths
+2025-12-25 09:49:03,437 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 80/100 paths
+2025-12-25 09:49:06,148 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 90/100 paths
+2025-12-25 09:49:08,807 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scanned 100/100 paths
+2025-12-25 09:49:08,808 - Web-Scanner_web - INFO - log_debug:93 - Scanner scan_1766636322_8275: Scan completed - Found 2 paths in 26.79s
+2025-12-25 09:49:20,880 - Web-Scanner_web - DEBUG - history_page_function:239 - History page requested
+2025-12-25 09:49:26,084 - Web-Scanner_web - DEBUG - history_page_function:239 - History page requested
+2025-12-25 09:49:53,076 - Web-Scanner_web - INFO - <module>:59 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 09:49:53,080 - Web-Scanner_web - INFO - <module>:395 - Starting Flask development server - Direct Scan Mode
+2025-12-25 09:51:00,382 - Web-Scanner_web - DEBUG - history_page_function:239 - History page requested
+2025-12-25 09:51:02,328 - Web-Scanner_web - DEBUG - scan_page_function:233 - Scan page requested
+2025-12-25 09:52:19,611 - Web-Scanner_web - INFO - <module>:59 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 09:52:19,616 - Web-Scanner_web - INFO - <module>:395 - Starting Flask development server - Direct Scan Mode
+2025-12-25 09:52:25,187 - Web-Scanner_web - INFO - <module>:63 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:17:00,845 - Web-Scanner_web - INFO - <module>:63 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:17:38,887 - Web-Scanner_web - INFO - <module>:63 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:19:48,235 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:19:48,238 - Web-Scanner_web - INFO - <module>:452 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:19:48,336 - Web-Scanner_web - INFO - <module>:456 - Database initialized successfully
+2025-12-25 11:19:50,282 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:19:50,287 - Web-Scanner_web - INFO - <module>:452 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:19:50,332 - Web-Scanner_web - INFO - <module>:456 - Database initialized successfully
+2025-12-25 11:19:53,510 - Web-Scanner_web - DEBUG - index_function:239 - Dashboard page requested
+2025-12-25 11:20:03,777 - Web-Scanner_web - DEBUG - index_function:239 - Dashboard page requested
+2025-12-25 11:20:07,626 - Web-Scanner_web - DEBUG - scan_page_function:245 - Scan page requested
+2025-12-25 11:20:14,362 - Web-Scanner_web - INFO - start_scan_function:264 - Start scan API called
+2025-12-25 11:20:14,362 - Web-Scanner_web - INFO - start_scan_function:267 - Start scan API called with config: {'resource_level': 'low', 'url': 'https://www.shodan.io', 'http_method': 'GET', 'wordlist': 'db\\400_blacklist.txt', 'extensions': 'php,asp,aspx,jsp,html', 'threads': '5', 'timeout': '10', 'delay': '0', 'max_retries': '1', 'max_time': '0', 'recursive': False, 'async_mode': False}
+2025-12-25 11:20:14,363 - Web-Scanner_web - INFO - start_scan_function:276 - Created direct scanner scan_1766641814_7263
+2025-12-25 11:20:14,363 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Starting direct scan execution
+2025-12-25 11:20:14,363 - Web-Scanner_web - INFO - start_scan_function:291 - Direct scanner scan_1766641814_7263 thread started
+2025-12-25 11:20:14,364 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Step 1: Importing required modules
+2025-12-25 11:20:14,371 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Imported options and blacklists
+2025-12-25 11:20:14,374 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Imported settings
+2025-12-25 11:20:14,375 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Basic options configured
+2025-12-25 11:20:14,375 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Step 2: Setting up dictionary
+2025-12-25 11:20:14,382 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Dictionary loaded with 9 entries
+2025-12-25 11:20:14,382 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Step 3: Setting up requester
+2025-12-25 11:20:14,829 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Requester setup for https://www.shodan.io
+2025-12-25 11:20:14,829 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Step 5: Starting actual path scanning
+2025-12-25 11:20:15,798 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: FOUND: %ff - 200
+2025-12-25 11:20:17,016 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: FOUND: %C0%AE%C0%AE%C0%AF - 200
+2025-12-25 11:20:17,494 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Scan completed - Found 2 paths in 3.13s
+2025-12-25 11:20:17,495 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Scan failed: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+2025-12-25 11:20:17,495 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Full error: RuntimeError('Working outside of application context.\n\nThis typically means that you attempted to use functionality that needed\nthe current application. To solve this, set up an application context\nwith app.app_context(). See the documentation for more information.')
+2025-12-25 11:20:17,533 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766641814_7263: Traceback: Traceback (most recent call last):
+  File "X:\CURSOR\Web-Scanner\web_interface\app_final.py", line 219, in execute_scan_function
+    save_scan_to_database(self)
+  File "X:\CURSOR\Web-Scanner\web_interface\database.py", line 197, in save_scan_to_database
+    db.session.rollback()
+  File "C:\Users\bobby\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlalchemy\orm\scoping.py", line 1716, in rollback
+    return self._proxied.rollback()
+           ^^^^^^^^^^^^^
+  File "C:\Users\bobby\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlalchemy\orm\scoping.py", line 196, in _proxied
+    return self.registry()
+           ^^^^^^^^^^^^^^^
+  File "C:\Users\bobby\AppData\Local\Programs\Python\Python312\Lib\site-packages\sqlalchemy\util\_collections.py", line 640, in __call__
+    key = self.scopefunc()
+          ^^^^^^^^^^^^^^^^
+  File "C:\Users\bobby\AppData\Local\Programs\Python\Python312\Lib\site-packages\flask_sqlalchemy\session.py", line 111, in _app_ctx_id
+    return id(app_ctx._get_current_object())  # type: ignore[attr-defined]
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\bobby\AppData\Local\Programs\Python\Python312\Lib\site-packages\werkzeug\local.py", line 508, in _get_current_object
+    raise RuntimeError(unbound_message) from None
+RuntimeError: Working outside of application context.
+
+This typically means that you attempted to use functionality that needed
+the current application. To solve this, set up an application context
+with app.app_context(). See the documentation for more information.
+
+2025-12-25 11:20:19,087 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:20:19,090 - Web-Scanner_web - INFO - <module>:452 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:20:19,158 - Web-Scanner_web - INFO - <module>:456 - Database initialized successfully
+2025-12-25 11:21:28,994 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:21:28,998 - Web-Scanner_web - INFO - <module>:456 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:21:29,060 - Web-Scanner_web - INFO - <module>:460 - Database initialized successfully
+2025-12-25 11:21:58,914 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:21:58,919 - Web-Scanner_web - INFO - <module>:456 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:21:58,968 - Web-Scanner_web - INFO - <module>:460 - Database initialized successfully
+2025-12-25 11:25:36,126 - Web-Scanner_web - DEBUG - scan_page_function:248 - Scan page requested
+2025-12-25 11:25:42,176 - Web-Scanner_web - INFO - start_scan_function:267 - Start scan API called
+2025-12-25 11:25:42,178 - Web-Scanner_web - INFO - start_scan_function:270 - Start scan API called with config: {'resource_level': 'low', 'url': 'https://www.shodan.io', 'http_method': 'GET', 'wordlist': 'db/400_blacklist.txt', 'extensions': 'php,asp,aspx,jsp,html', 'threads': '5', 'timeout': '10', 'delay': '0', 'max_retries': '1', 'max_time': '0', 'recursive': False, 'async_mode': False}
+2025-12-25 11:25:42,179 - Web-Scanner_web - INFO - start_scan_function:279 - Created direct scanner scan_1766642142_2717
+2025-12-25 11:25:42,179 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Starting direct scan execution
+2025-12-25 11:25:42,179 - Web-Scanner_web - INFO - start_scan_function:295 - Direct scanner scan_1766642142_2717 thread started
+2025-12-25 11:25:42,179 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Step 1: Importing required modules
+2025-12-25 11:25:42,184 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Imported options and blacklists
+2025-12-25 11:25:42,190 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Imported settings
+2025-12-25 11:25:42,190 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Basic options configured
+2025-12-25 11:25:42,190 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Step 2: Setting up dictionary
+2025-12-25 11:25:42,193 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Dictionary loaded with 9 entries
+2025-12-25 11:25:42,194 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Step 3: Setting up requester
+2025-12-25 11:25:42,493 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Requester setup for https://www.shodan.io
+2025-12-25 11:25:42,493 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Step 5: Starting actual path scanning
+2025-12-25 11:25:43,158 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: FOUND: %ff - 200
+2025-12-25 11:25:44,898 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: FOUND: %C0%AE%C0%AE%C0%AF - 200
+2025-12-25 11:25:45,391 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642142_2717: Scan completed - Found 2 paths in 3.21s
+2025-12-25 11:26:18,361 - Web-Scanner_web - INFO - start_scan_function:267 - Start scan API called
+2025-12-25 11:26:18,362 - Web-Scanner_web - INFO - start_scan_function:270 - Start scan API called with config: {'resource_level': 'low', 'url': 'https://www.shodan.io', 'http_method': 'GET', 'wordlist': 'db/dicc.txt', 'extensions': 'php,asp,aspx,jsp,html', 'threads': '5', 'timeout': '10', 'delay': '0', 'max_retries': '1', 'max_time': '0', 'recursive': False, 'async_mode': False}
+2025-12-25 11:26:18,362 - Web-Scanner_web - INFO - start_scan_function:279 - Created direct scanner scan_1766642178_911
+2025-12-25 11:26:18,362 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Starting direct scan execution
+2025-12-25 11:26:18,362 - Web-Scanner_web - INFO - start_scan_function:295 - Direct scanner scan_1766642178_911 thread started
+2025-12-25 11:26:18,362 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Step 1: Importing required modules
+2025-12-25 11:26:18,363 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Imported options and blacklists
+2025-12-25 11:26:18,363 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Imported settings
+2025-12-25 11:26:18,363 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Basic options configured
+2025-12-25 11:26:18,363 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Step 2: Setting up dictionary
+2025-12-25 11:26:18,375 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Dictionary loaded with 9120 entries
+2025-12-25 11:26:18,375 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Step 3: Setting up requester
+2025-12-25 11:26:18,376 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Requester setup for https://www.shodan.io
+2025-12-25 11:26:18,376 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Step 5: Starting actual path scanning
+2025-12-25 11:26:20,750 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: FOUND: %C0%AE%C0%AE%C0%AF - 200
+2025-12-25 11:26:21,014 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: FOUND: %ff - 200
+2025-12-25 11:26:21,275 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 10/100 paths
+2025-12-25 11:26:24,404 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 20/100 paths
+2025-12-25 11:26:27,552 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 30/100 paths
+2025-12-25 11:26:30,722 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 40/100 paths
+2025-12-25 11:26:33,647 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 50/100 paths
+2025-12-25 11:26:36,458 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 60/100 paths
+2025-12-25 11:26:39,598 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 70/100 paths
+2025-12-25 11:26:42,370 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 80/100 paths
+2025-12-25 11:26:44,045 - Web-Scanner_web - DEBUG - scan_page_function:248 - Scan page requested
+2025-12-25 11:26:45,029 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 90/100 paths
+2025-12-25 11:26:47,896 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scanned 100/100 paths
+2025-12-25 11:26:47,896 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642178_911: Scan completed - Found 2 paths in 29.53s
+2025-12-25 11:27:01,592 - Web-Scanner_web - INFO - start_scan_function:267 - Start scan API called
+2025-12-25 11:27:01,592 - Web-Scanner_web - INFO - start_scan_function:270 - Start scan API called with config: {'resource_level': 'low', 'url': 'https://www.shodan.io', 'http_method': 'GET', 'wordlist': 'db/dicc.txt', 'extensions': 'php,asp,aspx,jsp,html', 'threads': '5', 'timeout': '10', 'delay': '0', 'max_retries': '1', 'max_time': '0', 'recursive': False, 'async_mode': False}
+2025-12-25 11:27:01,592 - Web-Scanner_web - INFO - start_scan_function:279 - Created direct scanner scan_1766642221_911
+2025-12-25 11:27:01,593 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Starting direct scan execution
+2025-12-25 11:27:01,593 - Web-Scanner_web - INFO - start_scan_function:295 - Direct scanner scan_1766642221_911 thread started
+2025-12-25 11:27:01,594 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Step 1: Importing required modules
+2025-12-25 11:27:01,594 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Imported options and blacklists
+2025-12-25 11:27:01,594 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Imported settings
+2025-12-25 11:27:01,594 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Basic options configured
+2025-12-25 11:27:01,594 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Step 2: Setting up dictionary
+2025-12-25 11:27:01,606 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Dictionary loaded with 9120 entries
+2025-12-25 11:27:01,606 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Step 3: Setting up requester
+2025-12-25 11:27:01,608 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Requester setup for https://www.shodan.io
+2025-12-25 11:27:01,608 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Step 5: Starting actual path scanning
+2025-12-25 11:27:03,989 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: FOUND: %C0%AE%C0%AE%C0%AF - 200
+2025-12-25 11:27:04,266 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: FOUND: %ff - 200
+2025-12-25 11:27:04,536 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 10/100 paths
+2025-12-25 11:27:07,428 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 20/100 paths
+2025-12-25 11:27:10,403 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 30/100 paths
+2025-12-25 11:27:13,070 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 40/100 paths
+2025-12-25 11:27:16,162 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 50/100 paths
+2025-12-25 11:27:18,996 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 60/100 paths
+2025-12-25 11:27:21,658 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 70/100 paths
+2025-12-25 11:27:24,458 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 80/100 paths
+2025-12-25 11:27:27,202 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 90/100 paths
+2025-12-25 11:27:30,061 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scanned 100/100 paths
+2025-12-25 11:27:30,061 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642221_911: Scan completed - Found 2 paths in 28.47s
+2025-12-25 11:28:07,011 - Web-Scanner_web - DEBUG - config_page_function:260 - Config page requested
+2025-12-25 11:28:13,354 - Web-Scanner_web - DEBUG - index_function:242 - Dashboard page requested
+2025-12-25 11:28:16,172 - Web-Scanner_web - DEBUG - history_page_function:254 - History page requested
+2025-12-25 11:28:18,898 - Web-Scanner_web - DEBUG - scan_page_function:248 - Scan page requested
+2025-12-25 11:28:25,159 - Web-Scanner_web - INFO - start_scan_function:267 - Start scan API called
+2025-12-25 11:28:25,160 - Web-Scanner_web - INFO - start_scan_function:270 - Start scan API called with config: {'resource_level': 'low', 'url': 'https://www.shodan.io', 'http_method': 'GET', 'wordlist': 'db/400_blacklist.txt', 'extensions': 'php,asp,aspx,jsp,html', 'threads': '5', 'timeout': '10', 'delay': '0', 'max_retries': '1', 'max_time': '0', 'recursive': False, 'async_mode': False}
+2025-12-25 11:28:25,160 - Web-Scanner_web - INFO - start_scan_function:279 - Created direct scanner scan_1766642305_2717
+2025-12-25 11:28:25,160 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Starting direct scan execution
+2025-12-25 11:28:25,160 - Web-Scanner_web - INFO - start_scan_function:295 - Direct scanner scan_1766642305_2717 thread started
+2025-12-25 11:28:25,160 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Step 1: Importing required modules
+2025-12-25 11:28:25,162 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Imported options and blacklists
+2025-12-25 11:28:25,162 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Imported settings
+2025-12-25 11:28:25,162 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Basic options configured
+2025-12-25 11:28:25,162 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Step 2: Setting up dictionary
+2025-12-25 11:28:25,163 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Dictionary loaded with 9 entries
+2025-12-25 11:28:25,163 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Step 3: Setting up requester
+2025-12-25 11:28:25,164 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Requester setup for https://www.shodan.io
+2025-12-25 11:28:25,164 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Step 5: Starting actual path scanning
+2025-12-25 11:28:26,089 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: FOUND: %ff - 200
+2025-12-25 11:28:27,252 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: FOUND: %C0%AE%C0%AE%C0%AF - 200
+2025-12-25 11:28:27,965 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642305_2717: Scan completed - Found 2 paths in 2.80s
+2025-12-25 11:30:12,713 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:30:12,718 - Web-Scanner_web - INFO - <module>:466 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:30:12,772 - Web-Scanner_web - INFO - <module>:470 - Database initialized successfully
+2025-12-25 11:30:46,876 - Web-Scanner_web - DEBUG - scan_page_function:258 - Scan page requested
+2025-12-25 11:30:54,161 - Web-Scanner_web - INFO - start_scan_function:277 - Start scan API called
+2025-12-25 11:30:54,162 - Web-Scanner_web - INFO - start_scan_function:280 - Start scan API called with config: {'resource_level': 'low', 'url': 'https://www.shodan.io', 'http_method': 'GET', 'wordlist': 'db/dicc.txt', 'extensions': 'php,asp,aspx,jsp,html', 'threads': '5', 'timeout': '10', 'delay': '0', 'max_retries': '1', 'max_time': '0', 'recursive': False, 'async_mode': False}
+2025-12-25 11:30:54,162 - Web-Scanner_web - INFO - start_scan_function:289 - Created direct scanner scan_1766642454_1777
+2025-12-25 11:30:54,162 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Starting direct scan execution
+2025-12-25 11:30:54,163 - Web-Scanner_web - INFO - start_scan_function:305 - Direct scanner scan_1766642454_1777 thread started
+2025-12-25 11:30:54,163 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Step 1: Importing required modules
+2025-12-25 11:30:54,167 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Imported options and blacklists
+2025-12-25 11:30:54,170 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Imported settings
+2025-12-25 11:30:54,171 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Basic options configured
+2025-12-25 11:30:54,171 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Step 2: Setting up dictionary
+2025-12-25 11:30:54,192 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Dictionary loaded with 9120 entries
+2025-12-25 11:30:54,192 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Step 3: Setting up requester
+2025-12-25 11:30:54,514 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Requester setup for https://www.shodan.io
+2025-12-25 11:30:54,514 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Step 5: Starting actual path scanning
+2025-12-25 11:30:57,246 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: FOUND: %C0%AE%C0%AE%C0%AF - 200
+2025-12-25 11:30:57,589 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: FOUND: %ff - 200
+2025-12-25 11:30:57,918 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 10/9120 paths
+2025-12-25 11:31:01,437 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 20/9120 paths
+2025-12-25 11:31:04,247 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 30/9120 paths
+2025-12-25 11:31:07,154 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 40/9120 paths
+2025-12-25 11:31:09,989 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 50/9120 paths
+2025-12-25 11:31:12,722 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 60/9120 paths
+2025-12-25 11:31:16,016 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 70/9120 paths
+2025-12-25 11:31:18,679 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 80/9120 paths
+2025-12-25 11:31:21,351 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 90/9120 paths
+2025-12-25 11:31:24,202 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 100/9120 paths
+2025-12-25 11:31:26,972 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 110/9120 paths
+2025-12-25 11:31:30,406 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 120/9120 paths
+2025-12-25 11:31:33,368 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 130/9120 paths
+2025-12-25 11:31:36,069 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 140/9120 paths
+2025-12-25 11:31:39,138 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 150/9120 paths
+2025-12-25 11:31:42,175 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 160/9120 paths
+2025-12-25 11:31:45,143 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 170/9120 paths
+2025-12-25 11:31:48,145 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 180/9120 paths
+2025-12-25 11:31:51,263 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 190/9120 paths
+2025-12-25 11:31:54,705 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 200/9120 paths
+2025-12-25 11:31:57,532 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 210/9120 paths
+2025-12-25 11:32:00,627 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 220/9120 paths
+2025-12-25 11:32:03,654 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 230/9120 paths
+2025-12-25 11:32:07,451 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 240/9120 paths
+2025-12-25 11:32:10,343 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 250/9120 paths
+2025-12-25 11:32:13,115 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 260/9120 paths
+2025-12-25 11:32:17,042 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 270/9120 paths
+2025-12-25 11:32:20,336 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 280/9120 paths
+2025-12-25 11:32:24,568 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 290/9120 paths
+2025-12-25 11:32:28,380 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 300/9120 paths
+2025-12-25 11:32:31,574 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 310/9120 paths
+2025-12-25 11:32:34,548 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 320/9120 paths
+2025-12-25 11:32:37,943 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 330/9120 paths
+2025-12-25 11:32:40,985 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 340/9120 paths
+2025-12-25 11:32:45,091 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 350/9120 paths
+2025-12-25 11:32:48,752 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 360/9120 paths
+2025-12-25 11:32:51,942 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 370/9120 paths
+2025-12-25 11:32:55,535 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 380/9120 paths
+2025-12-25 11:32:58,555 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scanned 390/9120 paths
+2025-12-25 11:32:59,295 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scan stop requested
+2025-12-25 11:32:59,393 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scan stopped by user
+2025-12-25 11:32:59,394 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scan completed - Found 2 paths in 125.23s
+2025-12-25 11:33:01,944 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scan stop requested
+2025-12-25 11:33:03,919 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scan stop requested
+2025-12-25 11:33:04,694 - Web-Scanner_web - INFO - log_debug:102 - Scanner scan_1766642454_1777: Scan stop requested
+2025-12-25 11:41:59,634 - Web-Scanner_web - DEBUG - history_page_function:264 - History page requested
+2025-12-25 11:43:02,277 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:43:02,282 - Web-Scanner_web - INFO - <module>:466 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:43:02,332 - Web-Scanner_web - INFO - <module>:470 - Database initialized successfully
+2025-12-25 11:43:18,120 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:43:18,125 - Web-Scanner_web - INFO - <module>:467 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:43:18,190 - Web-Scanner_web - INFO - <module>:471 - Database initialized successfully
+2025-12-25 11:44:13,964 - Web-Scanner_web - DEBUG - history_page_function:264 - History page requested
+2025-12-25 11:44:58,762 - Web-Scanner_web - DEBUG - config_page_function:270 - Config page requested
+2025-12-25 11:47:09,205 - Web-Scanner_web - INFO - <module>:64 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-25 11:47:09,209 - Web-Scanner_web - INFO - <module>:467 - Starting Flask development server - Direct Scan Mode
+2025-12-25 11:47:09,260 - Web-Scanner_web - INFO - <module>:471 - Database initialized successfully
+2025-12-25 11:48:24,548 - Web-Scanner_web - DEBUG - config_page_function:270 - Config page requested
+2025-12-25 11:48:24,558 - Web-Scanner_web - DEBUG - index_function:252 - Dashboard page requested

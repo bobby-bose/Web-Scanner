@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Scan - Web-ScannerAdmin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #7c3aed;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .sidebar-header h3 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-header .subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-top: 0.25rem;
+        }
+
+        .sidebar-menu {
+            padding: 1.5rem 0;
+        }
+
+        .nav-item {
+            margin: 0.25rem 0;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link i {
+            width: 20px;
+            margin-right: 0.75rem;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content-header p {
+            color: #6b7280;
+            margin: 0.5rem 0 0 0;
+            font-size: 1.125rem;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section h5 {
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--dark-color);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-section h5 i {
+            color: var(--primary-color);
+        }
+
+        .form-label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+        }
+
+        .form-control, .form-select {
+            border: 2px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 0.2rem rgba(79, 70, 229, 0.25);
+            background: white;
+        }
+
+        .btn {
+            border-radius: 0.5rem;
+            font-weight: 500;
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+        }
+
+        .btn-outline-secondary {
+            border: 2px solid var(--border-color);
+            color: var(--dark-color);
+            background: transparent;
+        }
+
+        .btn-outline-secondary:hover {
+            background: var(--border-color);
+            transform: translateY(-2px);
+        }
+
+        .resource-buttons {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .resource-btn {
+            flex: 1;
+            padding: 0.75rem;
+            border: 2px solid var(--border-color);
+            background: white;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .resource-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .resource-btn.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .resource-btn.low.active {
+            background: linear-gradient(135deg, var(--success-color), #059669);
+            border-color: var(--success-color);
+        }
+
+        .resource-btn.medium.active {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            border-color: var(--warning-color);
+        }
+
+        .resource-btn.high.active {
+            background: linear-gradient(135deg, var(--danger-color), #dc2626);
+            border-color: var(--danger-color);
+        }
+
+        .step-indicator {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .step-indicator.active {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .step-indicator.completed {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .verbose-container {
+            background: #1a1a1a;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .verbose-output {
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            color: #00ff00;
+            line-height: 1.4;
+        }
+
+        .verbose-line {
+            margin-bottom: 0.25rem;
+            word-break: break-all;
+        }
+
+        .verbose-line.error {
+            color: #ff6b6b;
+        }
+
+        .verbose-line.warning {
+            color: #ffd93d;
+        }
+
+        .verbose-line.success {
+            color: #6bcf7f;
+        }
+
+        .advanced-settings {
+            background: rgba(249, 250, 251, 0.8);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .toggle-advanced {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-advanced:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .row.g-3 {
+            margin-bottom: 1rem;
+        }
+
+        .input-group-text {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        .scan-status {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .scan-status.active {
+            display: block;
+        }
+
+        .progress {
+            height: 10px;
+            border-radius: 1rem;
+            background: var(--border-color);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 4rem;
+            }
+
+            .mobile-toggle {
+                display: block;
+            }
+
+            .content-header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tooltip-icon {
+            color: var(--primary-color);
+            cursor: help;
+            margin-left: 0.25rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Toggle -->
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-search"></i> Web-Scanner</h3>
+            <div class="subtitle">Admin Dashboard</div>
+        </div>
+        <div class="sidebar-menu">
+            <div class="nav-item">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/scan" class="nav-link active">
+                    <i class="fas fa-crosshairs"></i>
+                    New Scan
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/history" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    Scan History
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="content-header fade-in">
+            <h1>New Scan</h1>
+            <p>Configure and start a new directory scan</p>
+        </div>
+
+        <div class="form-container fade-in">
+            <form id="scanForm">
+                <!-- Resource Usage -->
+                <div class="form-section">
+                    <h5><i class="fas fa-microchip"></i> Resource Usage</h5>
+                    <div class="resource-buttons">
+                        <div class="resource-btn low" onclick="setResourceLevel('low', this)">
+                            <i class="fas fa-leaf"></i>
+                            <div><strong>Low</strong></div>
+                            <small>10% CPU/Memory</small>
+                        </div>
+                        <div class="resource-btn medium active" onclick="setResourceLevel('medium', this)">
+                            <i class="fas fa-balance-scale"></i>
+                            <div><strong>Medium</strong></div>
+                            <small>30% CPU/Memory</small>
+                        </div>
+                        <div class="resource-btn high" onclick="setResourceLevel('high', this)">
+                            <i class="fas fa-rocket"></i>
+                            <div><strong>High</strong></div>
+                            <small>50% CPU/Memory</small>
+                        </div>
+                    </div>
+                    <input type="hidden" id="resource_level" name="resource_level" value="medium">
+                </div>
+
+                <!-- Basic Configuration -->
+                <div class="form-section">
+                    <h5><i class="fas fa-target"></i> Target Configuration</h5>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label for="url" class="form-label">
+                                Target URL
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="The target URL to scan (e.g., https://example.com)"></i>
+                            </label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="fas fa-globe"></i></span>
+                                <input type="url" class="form-control" id="url" name="url" placeholder="https://example.com" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="http_method" class="form-label">
+                                HTTP Method
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="HTTP request method to use"></i>
+                            </label>
+                            <select class="form-select" id="http_method" name="http_method">
+                                <option value="GET">GET</option>
+                                <option value="POST">POST</option>
+                                <option value="HEAD">HEAD</option>
+                                <option value="PUT">PUT</option>
+                                <option value="DELETE">DELETE</option>
+                                <option value="PATCH">PATCH</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="wordlist" class="form-label">
+                                Wordlist
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Wordlist file to use for scanning"></i>
+                            </label>
+                            <select class="form-select" id="wordlist" name="wordlist">
+                                <option value="db/dicc.txt">Default (dicc.txt)</option>
+                                <!-- Wordlists will be loaded here -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scan Configuration -->
+                <div class="form-section">
+                    <h5><i class="fas fa-cogs"></i> Scan Configuration</h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="extensions" class="form-label">
+                                Extensions
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="File extensions to scan for (comma-separated)"></i>
+                            </label>
+                            <input type="text" class="form-control" id="extensions" name="extensions" value="php,asp,aspx,jsp,html" placeholder="php,asp,aspx,jsp,html">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="threads" class="form-label">
+                                Threads
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Number of concurrent threads"></i>
+                            </label>
+                            <input type="number" class="form-control" id="threads" name="threads" value="25" min="1" max="200">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="timeout" class="form-label">
+                                Timeout (seconds)
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Request timeout in seconds"></i>
+                            </label>
+                            <input type="number" class="form-control" id="timeout" name="timeout" value="10" min="1" max="300">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filtering -->
+                <div class="form-section">
+                    <h5><i class="fas fa-filter"></i> Response Filtering</h5>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="include_status_codes" class="form-label">
+                                Include Status Codes
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Only show responses with these status codes (comma-separated)"></i>
+                            </label>
+                            <input type="text" class="form-control" id="include_status_codes" name="include_status_codes" placeholder="200,301,302">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="exclude_status_codes" class="form-label">
+                                Exclude Status Codes
+                                <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Hide responses with these status codes (comma-separated)"></i>
+                            </label>
+                            <input type="text" class="form-control" id="exclude_status_codes" name="exclude_status_codes" placeholder="404,500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Settings Toggle -->
+                <button type="button" class="toggle-advanced" onclick="toggleAdvanced()">
+                    <i class="fas fa-cog"></i> Advanced Settings
+                </button>
+
+                <div class="advanced-settings" id="advancedSettings" style="display: none;">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="proxy" class="form-label">Proxy URL</label>
+                            <input type="url" class="form-control" id="proxy" name="proxy" placeholder="http://proxy:8080">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="delay" class="form-label">Delay (seconds)</label>
+                            <input type="number" class="form-control" id="delay" name="delay" value="0" min="0" step="0.1">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="max_retries" class="form-label">Max Retries</label>
+                            <input type="number" class="form-control" id="max_retries" name="max_retries" value="1" min="0" max="10">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="max_time" class="form-label">Max Time (seconds)</label>
+                            <input type="number" class="form-control" id="max_time" name="max_time" value="0" min="0">
+                        </div>
+                        <div class="col-md-6">
+                            <label for="recursive" class="form-label">Recursive Scan</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="recursive" name="recursive">
+                                <label class="form-check-label" for="recursive">
+                                    Enable recursive scanning
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="async_mode" class="form-label">Async Mode</label>
+                            <div class="form-check mt-2">
+                                <input class="form-check-input" type="checkbox" id="async_mode" name="async_mode">
+                                <label class="form-check-label" for="async_mode">
+                                    Enable async mode (faster)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-play"></i> Start Scan
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary" onclick="resetForm()">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Scan Status - Moved to top -->
+        <div class="scan-status" id="scanStatus">
+            <h5><i class="fas fa-chart-line"></i> Scan Progress</h5>
+            
+            <!-- Main Progress -->
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span>Overall Progress</span>
+                    <span id="progressText">0%</span>
+                </div>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar" style="width: 0%"></div>
+                </div>
+            </div>
+            
+            <!-- Step Progress -->
+            <div class="mb-3">
+                <h6><i class="fas fa-tasks"></i> Current Step</h6>
+                <div id="stepProgress">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="step-indicator" id="step1">
+                            <i class="fas fa-cog"></i>
+                        </div>
+                        <span>Initializing</span>
+                        <div class="ms-auto">
+                            <small class="text-muted" id="step1Status">Waiting...</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="step-indicator" id="step2">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <span>Loading Dictionary</span>
+                        <div class="ms-auto">
+                            <small class="text-muted" id="step2Status">Waiting...</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="step-indicator" id="step3">
+                            <i class="fas fa-globe"></i>
+                        </div>
+                        <span>Setting Up Scanner</span>
+                        <div class="ms-auto">
+                            <small class="text-muted" id="step3Status">Waiting...</small>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="step-indicator" id="step4">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <span>Scanning</span>
+                        <div class="ms-auto">
+                            <small class="text-muted" id="step4Status">Waiting...</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Verbose Output -->
+            <div class="mb-3">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6><i class="fas fa-terminal"></i> Detailed Output</h6>
+                    <button class="btn btn-sm btn-outline-primary" onclick="getDebugInfo()" id="debugBtn">
+                        <i class="fas fa-bug"></i> Get Debug Info
+                    </button>
+                </div>
+                <div class="verbose-container" id="verboseContainer">
+                    <div id="verboseOutput" class="verbose-output">
+                        <div class="verbose-line">Initializing scanner...</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Real-time Results -->
+            <div class="mb-3">
+                <h6><i class="fas fa-list"></i> Found Paths</h6>
+                <div class="table-responsive">
+                    <table class="table table-sm" id="realtimeResults">
+                        <thead>
+                            <tr>
+                                <th>Path</th>
+                                <th>Status</th>
+                                <th>Size</th>
+                                <th>URL</th>
+                            </tr>
+                        </thead>
+                        <tbody id="realtimeResultsBody">
+                            <tr><td colspan="4" class="text-center text-muted">No paths found yet...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Status:</strong> <span id="scanStatusText">Initializing...</span></p>
+                    <p><strong>Results Found:</strong> <span id="resultsCount">0</span></p>
+                    <p><strong>Requests Made:</strong> <span id="requestsCount">0</span></p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Start Time:</strong> <span id="startTime">-</span></p>
+                    <p><strong>Errors:</strong> <span id="errorCount">0</span></p>
+                    <p><strong>Current Speed:</strong> <span id="currentSpeed">0 req/s</span></p>
+                </div>
+            </div>
+            <div class="mt-3">
+                <button class="btn btn-danger" onclick="stopScan()">
+                    <i class="fas fa-stop"></i> Stop Scan
+                </button>
+                <button class="btn btn-primary ms-2" onclick="viewResults()">
+                    <i class="fas fa-eye"></i> View Results
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentScanId = null;
+        let statusInterval = null;
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function toggleAdvanced() {
+            const settings = document.getElementById('advancedSettings');
+            settings.style.display = settings.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function resetForm() {
+            document.getElementById('scanForm').reset();
+            document.getElementById('scanStatus').classList.remove('active');
+            if (statusInterval) {
+                clearInterval(statusInterval);
+                statusInterval = null;
+            }
+        }
+
+        async function loadWordlists() {
+            try {
+                const response = await fetch('/api/wordlists');
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    const select = document.getElementById('wordlist');
+                    select.innerHTML = '';
+
+                    if (Array.isArray(data.wordlists) && data.wordlists.length > 0) {
+                        data.wordlists.forEach(wordlist => {
+                            const option = document.createElement('option');
+                            option.value = wordlist.path;
+                            option.textContent = `${wordlist.name} (${formatBytes(wordlist.size)})`;
+                            select.appendChild(option);
+                        });
+                    } else {
+                        const option = document.createElement('option');
+                        option.value = 'db/dicc.txt';
+                        option.textContent = 'Default (dicc.txt)';
+                        select.appendChild(option);
+                        console.error('No wordlists returned from /api/wordlists. Check DB init + wordlist loading on server.');
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading wordlists:', error);
+            }
+        }
+
+        function formatBytes(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+
+        async function startScan(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const config = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (value) {
+                    config[key] = value;
+                }
+            }
+            
+            // Handle checkboxes
+            config.recursive = document.getElementById('recursive').checked;
+            config.async_mode = document.getElementById('async_mode').checked;
+            
+            try {
+                const response = await fetch('/api/scan/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(config)
+                });
+                
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    currentScanId = data.scan_id;
+                    document.getElementById('scanStatus').classList.add('active');
+                    startStatusMonitoring();
+                } else {
+                    alert('Error starting scan: ' + data.message);
+                }
+            } catch (error) {
+                console.error('Error starting scan:', error);
+                alert('Error starting scan: ' + error.message);
+            }
+        }
+
+        function startStatusMonitoring() {
+            if (statusInterval) {
+                clearInterval(statusInterval);
+            }
+            
+            statusInterval = setInterval(updateScanStatus, 1000);
+            updateScanStatus();
+        }
+
+        function setResourceLevel(level, element) {
+            // Remove active class from all buttons
+            document.querySelectorAll('.resource-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Add active class to selected button
+            element.classList.add('active');
+            
+            // Update hidden input
+            document.getElementById('resource_level').value = level;
+            
+            // Adjust thread count based on resource level
+            const threadsInput = document.getElementById('threads');
+            switch(level) {
+                case 'low':
+                    threadsInput.value = 5;
+                    break;
+                case 'medium':
+                    threadsInput.value = 25;
+                    break;
+                case 'high':
+                    threadsInput.value = 100;
+                    break;
+            }
+        }
+
+        function addVerboseMessage(message, type = 'info') {
+            const verboseOutput = document.getElementById('verboseOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            const line = document.createElement('div');
+            line.className = `verbose-line ${type}`;
+            line.textContent = `[${timestamp}] ${message}`;
+            verboseOutput.appendChild(line);
+            
+            // Auto-scroll to bottom
+            const container = document.getElementById('verboseContainer');
+            container.scrollTop = container.scrollHeight;
+            
+            // Limit lines to prevent memory issues
+            const lines = verboseOutput.querySelectorAll('.verbose-line');
+            if (lines.length > 100) {
+                lines[0].remove();
+            }
+        }
+
+        function updateStepProgress(step, status) {
+            // Update step indicators
+            for (let i = 1; i <= 4; i++) {
+                const indicator = document.getElementById(`step${i}`);
+                const statusText = document.getElementById(`step${i}Status`);
+                
+                if (i < step) {
+                    indicator.classList.remove('active');
+                    indicator.classList.add('completed');
+                    statusText.textContent = 'Completed';
+                } else if (i === step) {
+                    indicator.classList.add('active');
+                    indicator.classList.remove('completed');
+                    statusText.textContent = status;
+                } else {
+                    indicator.classList.remove('active', 'completed');
+                    statusText.textContent = 'Waiting...';
+                }
+            }
+        }
+
+        function updateRealtimeResults() {
+            if (!currentScanId) return;
+            
+            fetch(`/api/scan/results/${currentScanId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success' && data.results.length > 0) {
+                        const tbody = document.getElementById('realtimeResultsBody');
+                        tbody.innerHTML = '';
+                        
+                        data.results.forEach(result => {
+                            const row = document.createElement('tr');
+                            row.innerHTML = `
+                                <td><code>${result.path}</code></td>
+                                <td><span class="badge bg-success">${result.status}</span></td>
+                                <td>${result.size} bytes</td>
+                                <td><a href="${result.url}" target="_blank">${result.url}</a></td>
+                            `;
+                            tbody.appendChild(row);
+                        });
+                        
+                        addVerboseMessage(`Found ${data.results.length} paths! Showing in results table.`, 'success');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error updating results:', error);
+                });
+        }
+
+        async function updateScanStatus() {
+            if (!currentScanId) return;
+            
+            try {
+                const response = await fetch(`/api/scan/status/${currentScanId}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    const scanData = data.data; // Extract nested data
+                    
+                    // Update main progress
+                    document.getElementById('progressBar').style.width = scanData.progress + '%';
+                    document.getElementById('progressText').textContent = scanData.progress + '%';
+                    document.getElementById('scanStatusText').textContent = scanData.status;
+                    document.getElementById('resultsCount').textContent = scanData.results_count;
+                    document.getElementById('errorCount').textContent = scanData.errors || 0;
+                    document.getElementById('requestsCount').textContent = scanData.jobs_processed || 0;
+                    
+                    // Update real-time results table
+                    if (scanData.results_count > 0) {
+                        updateRealtimeResults();
+                    }
+                    
+                    // Update step progress based on status
+                    if (scanData.status === 'initializing' || scanData.status === 'starting') {
+                        updateStepProgress(1, 'Initializing...');
+                        addVerboseMessage('Initializing scanner...', 'info');
+                    } else if (scanData.status === 'running' || scanData.status === 'scanning') {
+                        updateStepProgress(4, 'Scanning...');
+                        if (scanData.progress > 0 && scanData.progress < 25) {
+                            addVerboseMessage('Loading dictionary...', 'info');
+                            updateStepProgress(2, 'Loading dictionary...');
+                        } else if (scanData.progress >= 25 && scanData.progress < 50) {
+                            addVerboseMessage('Setting up scanner...', 'info');
+                            updateStepProgress(3, 'Setting up scanner...');
+                        } else if (scanData.progress >= 50) {
+                            addVerboseMessage(`Scanning progress: ${scanData.progress}% - Found ${scanData.results_count} results`, 'success');
+                        }
+                        // Get debug info more frequently during scanning
+                        if (Math.random() < 0.3) { // 30% chance to get debug info
+                            getDebugInfo();
+                        }
+                    } else if (scanData.status === 'completed') {
+                        updateStepProgress(4, 'Completed');
+                        addVerboseMessage('Scan completed successfully!', 'success');
+                        getDebugInfo(); // Get final debug info
+                    } else if (scanData.status === 'error') {
+                        addVerboseMessage(`Scan error: ${scanData.error}`, 'error');
+                        // Get detailed debug info
+                        getDebugInfo();
+                    }
+                    
+                    // Calculate current speed
+                    if (scanData.start_time && scanData.jobs_processed > 0) {
+                        const startTime = new Date(scanData.start_time);
+                        const elapsed = (Date.now() - startTime.getTime()) / 1000;
+                        const speed = Math.round(scanData.jobs_processed / elapsed);
+                        document.getElementById('currentSpeed').textContent = `${speed} req/s`;
+                    }
+                    
+                    if (scanData.start_time) {
+                        document.getElementById('startTime').textContent = new Date(scanData.start_time).toLocaleString();
+                    }
+                    
+                    if (scanData.status === 'completed' || scanData.status === 'error' || scanData.status === 'stopped') {
+                        clearInterval(statusInterval);
+                        statusInterval = null;
+                    }
+                }
+            } catch (error) {
+                console.error('Error updating scan status:', error);
+                addVerboseMessage(`Error updating status: ${error.message}`, 'error');
+            }
+        }
+
+        async function getDebugInfo() {
+            try {
+                const response = await fetch(`/api/scan/debug/${currentScanId}`);
+                const data = await response.json();
+                
+                if (data.status === 'success') {
+                    const debug = data.debug;
+                    
+                    // Display all debug messages from DirectScanner
+                    if (debug.debug_messages && debug.debug_messages.length > 0) {
+                        addVerboseMessage('=== DEBUG MESSAGES ===', 'info');
+                        debug.debug_messages.forEach(msg => {
+                            const level = msg.level.toLowerCase();
+                            const message = msg.message;
+                            
+                            if (level === 'error') {
+                                addVerboseMessage(`ERROR: ${message}`, 'error');
+                            } else if (level === 'warning') {
+                                addVerboseMessage(`WARNING: ${message}`, 'warning');
+                            } else if (level === 'info') {
+                                addVerboseMessage(`INFO: ${message}`, 'info');
+                            } else {
+                                addVerboseMessage(`${level.toUpperCase()}: ${message}`, 'info');
+                            }
+                        });
+                        addVerboseMessage('=== END DEBUG ===', 'info');
+                    }
+                    
+                    // Show summary info
+                    addVerboseMessage(`Status: ${debug.status} | Progress: ${debug.progress}% | Results: ${debug.results_count}`, 'success');
+                    
+                    if (debug.error) {
+                        addVerboseMessage(`ERROR: ${debug.error}`, 'error');
+                    }
+                }
+            } catch (error) {
+                addVerboseMessage(`Failed to get debug info: ${error.message}`, 'error');
+            }
+        }
+
+        async function stopScan() {
+            if (!currentScanId) return;
+            
+            try {
+                const response = await fetch(`/api/scan/stop/${currentScanId}`, {
+                    method: 'POST'
+                });
+                
+                if (response.ok) {
+                    if (statusInterval) {
+                        clearInterval(statusInterval);
+                        statusInterval = null;
+                    }
+                    updateScanStatus();
+                }
+            } catch (error) {
+                console.error('Error stopping scan:', error);
+            }
+        }
+
+        function viewResults() {
+            if (currentScanId) {
+                window.location.href = `/history?scan=${currentScanId}`;
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWordlists();
+            document.getElementById('scanForm').addEventListener('submit', startScan);
+            
+            // Initialize tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+    </script>
+</body>
+</html>
