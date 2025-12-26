@@ -114,3 +114,17 @@
  
 2025-12-26 14:19:39,287 - Web-Scanner_web - ERROR - log_debug:578 - ReconFTW recon_1766738979_9244: ReconFTW failed: Auto-install failed (exit 4294967295)
 2025-12-26 14:20:17,234 - Web-Scanner_web - INFO - <module>:75 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 14:20:19,065 - Web-Scanner_web - INFO - <module>:95 - Database initialized successfully
+2025-12-26 14:20:19,074 - Web-Scanner_web - INFO - <module>:1269 - Starting Flask development server - Direct Scan Mode
+2025-12-26 14:20:20,046 - Web-Scanner_web - INFO - <module>:1273 - Database initialized successfully
+2025-12-26 14:24:40,510 - Web-Scanner_web - INFO - <module>:75 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 14:24:43,197 - Web-Scanner_web - INFO - <module>:95 - Database initialized successfully
+2025-12-26 14:24:43,204 - Web-Scanner_web - INFO - <module>:1269 - Starting Flask development server - Direct Scan Mode
+2025-12-26 14:24:44,540 - Web-Scanner_web - INFO - <module>:1273 - Database initialized successfully
+2025-12-26 14:31:11,643 - Web-Scanner_web - INFO - <module>:75 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 14:31:14,658 - Web-Scanner_web - INFO - <module>:95 - Database initialized successfully
+2025-12-26 14:31:14,666 - Web-Scanner_web - INFO - <module>:1269 - Starting Flask development server - Direct Scan Mode
+2025-12-26 14:31:16,908 - Web-Scanner_web - INFO - <module>:1273 - Database initialized successfully
+2025-12-26 14:32:21,246 - Web-Scanner_web - INFO - <module>:75 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 14:32:23,942 - Web-Scanner_web - INFO - <module>:95 - Database initialized successfully
+2025-12-26 14:32:23,948 - Web-Scanner_web - INFO - <module>:1269 - Starting Flask development server - Direct Scan Mode

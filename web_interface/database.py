@@ -6,6 +6,7 @@ Database models for Web-ScannerWeb Interface - MongoDB
 import os
 import re
 from datetime import datetime
+import certifi
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure, DuplicateKeyError
 from urllib.parse import urlparse
@@ -363,33 +364,52 @@ def init_database(app):
     """Initialize MongoDB database connection"""
     global client, db, scan_manager, wordlist_manager
     
+    mongodb_url = app.config.get('MONGODB_URL', 'mongodb://localhost:27017/dirsearch')
+
     try:
         # Connect to MongoDB
-        mongodb_url = app.config.get('MONGODB_URL', 'mongodb://localhost:27017/dirsearch')
-        client = MongoClient(mongodb_url)
-        
+        # NOTE: Explicit TLS CA bundle helps on some container hosts (e.g., Render)
+        # when connecting to MongoDB Atlas.
+        client = MongoClient(
+            mongodb_url,
+            serverSelectionTimeoutMS=30000,
+            connectTimeoutMS=20000,
+            socketTimeoutMS=20000,
+            tlsCAFile=certifi.where(),
+        )
+
         # Test connection
         client.admin.command('ping')
-        
+
         # Get database name from URL or default
         db_name = mongodb_url.split('/')[-1] if '/' in mongodb_url else 'dirsearch'
+        if '?' in db_name:
+            db_name = db_name.split('?', 1)[0]
+        if not db_name:
+            db_name = 'dirsearch'
         db = client[db_name]
-        
+
         # Initialize managers
         scan_manager = ScanManager(db)
         wordlist_manager = WordlistManager(db)
-        
+
         # Load wordlists
         wordlist_manager.load_wordlists()
-        
+
         print(f"Successfully connected to MongoDB: {mongodb_url}")
-        
+
     except ConnectionFailure as e:
         print(f"Failed to connect to MongoDB: {e}")
-        raise
+        scan_manager = None
+        wordlist_manager = None
+        db = None
+        client = None
     except Exception as e:
         print(f"Database initialization failed: {e}")
-        raise
+        scan_manager = None
+        wordlist_manager = None
+        db = None
+        client = None
 
 def get_database():
     """Get database instance"""

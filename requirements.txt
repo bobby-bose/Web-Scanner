@@ -14,15 +14,16 @@ requests>=2.27.0
 requests_ntlm>=1.3.0
 colorama>=0.4.4
 ntlm_auth>=1.5.0
-beautifulsoup4>=4.8.0
+beautifulsoup4==4.12.2
 mysql-connector-python>=8.0.20
 psycopg[binary]>=3.0
 defusedcsv>=2.0.0
 requests-toolbelt>=1.0.0
 setuptools>=66.0.0
-httpx>=0.27.2
+httpx==0.24.1
 httpx-ntlm>=1.4.0
-gunicorn
+gunicorn==21.2.0
 pymongo>=4.0.0
+certifi>=2024.2.2
 
 dnspython>=2.6.0
