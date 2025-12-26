@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recon History - Web-ScannerAdmin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4f46e5;
+            --secondary-color: #7c3aed;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-color: #1f2937;
+            --light-color: #f9fafb;
+            --border-color: #e5e7eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--dark-color);
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 280px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+
+        .sidebar-header h3 {
+            font-weight: 700;
+            font-size: 1.5rem;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .sidebar-header .subtitle {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            margin-top: 0.25rem;
+        }
+
+        .sidebar-menu { padding: 1.5rem 0; }
+        .nav-item { margin: 0.25rem 0; }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            padding: 0.875rem 1.5rem;
+            color: var(--dark-color);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        .nav-link:hover {
+            background: rgba(79, 70, 229, 0.1);
+            color: var(--primary-color);
+            transform: translateX(5px);
+        }
+
+        .nav-link.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .nav-link i { width: 20px; margin-right: 0.75rem; }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 2rem;
+            min-height: 100vh;
+        }
+
+        .content-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-header h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin: 0;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content-header p {
+            color: #6b7280;
+            margin: 0.5rem 0 0 0;
+            font-size: 1.125rem;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+
+        .card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .card-header h5 { font-weight: 600; margin: 0; color: var(--dark-color); }
+        .card-body { padding: 1.5rem; }
+
+        .table { background: transparent; }
+
+        .table th {
+            border-top: none;
+            font-weight: 600;
+            color: var(--dark-color);
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .table td { border-top: 1px solid var(--border-color); vertical-align: middle; }
+
+        .badge { padding: 0.375rem 0.75rem; border-radius: 0.5rem; font-weight: 500; font-size: 0.75rem; }
+        .badge-running { background: linear-gradient(135deg, var(--warning-color), #d97706); color: white; }
+        .badge-completed { background: linear-gradient(135deg, var(--success-color), #059669); color: white; }
+        .badge-error { background: linear-gradient(135deg, var(--danger-color), #dc2626); color: white; }
+        .badge-stopped { background: linear-gradient(135deg, #6b7280, #4b5563); color: white; }
+
+        .btn {
+            border-radius: 0.5rem;
+            font-weight: 500;
+            padding: 0.625rem 1.25rem;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .btn-outline-primary {
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            background: transparent;
+        }
+
+        .btn-outline-primary:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline-danger {
+            border: 2px solid var(--danger-color);
+            color: var(--danger-color);
+            background: transparent;
+        }
+
+        .btn-outline-danger:hover {
+            background: var(--danger-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-sm { padding: 0.375rem 0.75rem; font-size: 0.875rem; }
+
+        .progress {
+            height: 8px;
+            border-radius: 1rem;
+            background: var(--border-color);
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            transition: width 0.3s ease;
+        }
+
+        .search-box { position: relative; }
+        .search-box input { padding-left: 2.5rem; }
+        .search-box i {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .mobile-toggle {
+            display: none;
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1001;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            font-size: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.active { transform: translateX(0); }
+            .main-content {
+                margin-left: 0;
+                padding: 1rem;
+                padding-top: 4rem;
+            }
+            .mobile-toggle { display: block; }
+            .content-header h1 { font-size: 2rem; }
+        }
+
+        .fade-in { animation: fadeIn 0.5s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6b7280;
+        }
+
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .code-badge {
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+        }
+
+        .section-kv {
+            background: rgba(0,0,0,0.04);
+            border-radius: 0.5rem;
+            padding: 0.75rem 1rem;
+        }
+
+        .section-kv code { word-break: break-word; }
+
+        .list-group-item code { word-break: break-word; }
+
+        .endpoint-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .endpoint-meta {
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .endpoint-title {
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <button class="mobile-toggle" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3><i class="fas fa-search"></i> Web-Scanner</h3>
+            <div class="subtitle">Admin Dashboard</div>
+        </div>
+        <div class="sidebar-menu">
+            <div class="nav-item">
+                <a href="/" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    Dashboard
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/scan" class="nav-link">
+                    <i class="fas fa-crosshairs"></i>
+                    New Scan
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/history" class="nav-link">
+                    <i class="fas fa-history"></i>
+                    Scan History
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/recon" class="nav-link">
+                    <i class="fas fa-sitemap"></i>
+                    New Recon
+                </a>
+            </div>
+            <div class="nav-item">
+                <a href="/recon/history" class="nav-link active">
+                    <i class="fas fa-folder-open"></i>
+                    Recon History
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="content-header fade-in">
+            <h1>Recon History</h1>
+            <p>View and explore recon runs with interactive sections</p>
+        </div>
+
+        <div class="card fade-in">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5>All Recons</h5>
+                    <div class="d-flex gap-2">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" class="form-control" id="searchInput" placeholder="Search recons..." style="width: 220px;">
+                        </div>
+                        <button class="btn btn-outline-primary btn-sm" onclick="refreshRecons()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Recon ID</th>
+                                <th>Domain</th>
+                                <th>Status</th>
+                                <th>Progress</th>
+                                <th>Live</th>
+                                <th>Started</th>
+                                <th>Duration</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reconsTable">
+                            <tr>
+                                <td colspan="8" class="text-center text-muted">
+                                    <i class="fas fa-spinner fa-spin"></i> Loading recons...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card fade-in" id="resultsCard" style="display: none;">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5>Recon Results</h5>
+                    <div>
+                        <button class="btn btn-outline-secondary btn-sm" onclick="hideResults()">
+                            <i class="fas fa-times"></i> Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="resultsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let currentReconId = null;
+        let allRecons = [];
+        let currentResults = null;
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('active');
+        }
+
+        function badgeClass(status) {
+            if (!status) return 'badge-running';
+            if (status === 'completed') return 'badge-completed';
+            if (status === 'error') return 'badge-error';
+            if (status === 'stopped') return 'badge-stopped';
+            return 'badge-running';
+        }
+
+        function calculateDuration(start, end) {
+            const diff = end - start;
+            const seconds = Math.floor(diff / 1000);
+            const minutes = Math.floor(seconds / 60);
+            const hours = Math.floor(minutes / 60);
+            if (hours > 0) return `${hours}h ${minutes % 60}m`;
+            if (minutes > 0) return `${minutes}m ${seconds % 60}s`;
+            return `${seconds}s`;
+        }
+
+        async function loadRecons() {
+            try {
+                const response = await fetch('/api/recon/list');
+                const data = await response.json();
+                if (data.status === 'success') {
+                    allRecons = data.recons || [];
+                    updateReconsTable(allRecons);
+
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const reconId = urlParams.get('recon');
+                    if (reconId) {
+                        viewResults(reconId);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading recons:', error);
+                document.getElementById('reconsTable').innerHTML = '<tr><td colspan="8" class="text-center text-danger">Error loading recons</td></tr>';
+            }
+        }
+
+        function updateReconsTable(recons) {
+            const tbody = document.getElementById('reconsTable');
+            if (!recons || recons.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">No recons found</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = recons.map(recon => {
+                const start = recon.start_time ? new Date(recon.start_time) : null;
+                const end = recon.end_time ? new Date(recon.end_time) : null;
+                const duration = start && end ? calculateDuration(start, end) : (start && recon.status === 'running' ? calculateDuration(start, new Date()) : '-');
+
+                return `
+                    <tr>
+                        <td><code class="code-badge">${(recon.scan_id || recon.id || '').toString().substring(0, 10)}</code></td>
+                        <td><strong>${recon.domain || (recon.config && recon.config.domain) || '-'}</strong></td>
+                        <td><span class="badge ${badgeClass(recon.status)}">${recon.status || '-'}</span></td>
+                        <td>
+                            <div class="progress" style="width: 80px;">
+                                <div class="progress-bar" style="width: ${recon.progress || 0}%"></div>
+                            </div>
+                            <small class="text-muted">${Math.round(recon.progress || 0)}%</small>
+                        </td>
+                        <td>${recon.results_count || 0}</td>
+                        <td>${start ? start.toLocaleString() : '-'}</td>
+                        <td>${duration}</td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary" onclick="viewResults('${recon.scan_id || recon.id}')" title="View Results">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderDnsRecords(dnsRecords) {
+            if (!dnsRecords) return '<div class="text-muted">No DNS records</div>';
+
+            const root = dnsRecords.root || {};
+            const types = Object.keys(root);
+            if (types.length === 0) return '<div class="text-muted">No DNS records</div>';
+
+            return `
+                <div class="row g-3">
+                    ${types.map(t => {
+                        const values = root[t] || [];
+                        return `
+                            <div class="col-md-6">
+                                <div class="section-kv">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <strong>${t}</strong>
+                                        <span class="badge bg-light text-dark">${values.length}</span>
+                                    </div>
+                                    <div class="mt-2">
+                                        ${(values.length ? values.map(v => `<div><code>${escapeHtml(v)}</code></div>`).join('') : '<div class="text-muted">(none)</div>')}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function renderSubdomains(subdomains) {
+            const items = Array.isArray(subdomains) ? subdomains : [];
+            if (items.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <i class="fas fa-sitemap"></i>
+                        <h5>No subdomains found</h5>
+                        <p>Certificate transparency did not return any subdomains.</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="row g-2">
+                    ${items.map(s => `
+                        <div class="col-md-6">
+                            <div class="section-kv"><code>${escapeHtml(s)}</code></div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function renderLiveHosts(liveHosts) {
+            const items = Array.isArray(liveHosts) ? liveHosts : [];
+            if (items.length === 0) {
+                return `
+                    <div class="empty-state">
+                        <i class="fas fa-globe"></i>
+                        <h5>No live endpoints</h5>
+                        <p>No HTTP/HTTPS endpoints responded.</p>
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="list-group">
+                    ${items.map(ep => {
+                        const status = ep.status ? `<span class="badge bg-light text-dark">${ep.status}</span>` : '';
+                        const title = ep.title ? `<div class="endpoint-title">${escapeHtml(ep.title)}</div>` : '';
+                        const server = ep.server ? `Server: ${escapeHtml(ep.server)}` : '';
+                        const cl = ep.content_length ? `Len: ${escapeHtml(ep.content_length)}` : '';
+                        const meta = [server, cl].filter(Boolean).join(' • ');
+                        return `
+                            <a class="list-group-item list-group-item-action" href="${escapeAttr(ep.url || '')}" target="_blank">
+                                <div class="endpoint-row">
+                                    <div>
+                                        <div><code>${escapeHtml(ep.url || '')}</code></div>
+                                        ${title}
+                                        ${meta ? `<div class="endpoint-meta">${meta}</div>` : ''}
+                                    </div>
+                                    <div>${status}</div>
+                                </div>
+                            </a>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        function displayResults(reconId, results) {
+            const container = document.getElementById('resultsContainer');
+            currentResults = results;
+
+            const domain = (results && results.domain) ? results.domain : reconId;
+            const summary = (results && results.summary) ? results.summary : {};
+            const engine = (results && results.engine) ? results.engine : ((results && results.artifacts) ? 'reconftw' : 'python');
+
+            const artifacts = results && results.artifacts ? results.artifacts : {};
+            const outputFiles = results && results.output_files ? results.output_files : [];
+
+            const hasReconFTWArtifacts = artifacts && Object.keys(artifacts).length > 0;
+
+            function renderOutputFiles(files) {
+                const list = Array.isArray(files) ? files : [];
+                if (!list.length) return '<div class="text-muted">No output files recorded</div>';
+                return `
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>File</th>
+                                    <th>Size</th>
+                                    <th>Download</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${list.map(f => {
+                                    const p = f.path || '';
+                                    const size = f.size || 0;
+                                    const dl = `/api/recon/file/${encodeURIComponent(reconId)}?path=${encodeURIComponent(p)}`;
+                                    return `
+                                        <tr>
+                                            <td><code>${escapeHtml(p)}</code></td>
+                                            <td>${size}</td>
+                                            <td>
+                                                <a class="btn btn-outline-primary btn-sm" href="${dl}">
+                                                    <i class="fas fa-download"></i>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            }
+
+            function renderReconFTWArtifacts(art) {
+                const a = art || {};
+                const subs = a.subdomains || [];
+                const webs = a.webs_all || a.webs || [];
+                const nInfo = a.nuclei_info || [];
+                const nLow = a.nuclei_low || [];
+                const nMed = a.nuclei_medium || [];
+                const nHigh = a.nuclei_high || [];
+                const nCrit = a.nuclei_critical || [];
+
+                return `
+                    <div class="accordion" id="reconftwArtifactsAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFTWSubs">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFTWSubs" aria-expanded="true" aria-controls="collapseFTWSubs">
+                                    reconFTW Subdomains <span class="badge bg-light text-dark ms-2">${subs.length}</span>
+                                </button>
+                            </h2>
+                            <div id="collapseFTWSubs" class="accordion-collapse collapse show" aria-labelledby="headingFTWSubs" data-bs-parent="#reconftwArtifactsAccordion">
+                                <div class="accordion-body">
+                                    ${renderSubdomains(subs)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFTWWebs">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFTWWebs" aria-expanded="false" aria-controls="collapseFTWWebs">
+                                    reconFTW Webs <span class="badge bg-light text-dark ms-2">${webs.length}</span>
+                                </button>
+                            </h2>
+                            <div id="collapseFTWWebs" class="accordion-collapse collapse" aria-labelledby="headingFTWWebs" data-bs-parent="#reconftwArtifactsAccordion">
+                                <div class="accordion-body">
+                                    ${renderSubdomains(webs)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFTWNuclei">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFTWNuclei" aria-expanded="false" aria-controls="collapseFTWNuclei">
+                                    reconFTW Nuclei Findings
+                                    <span class="badge bg-light text-dark ms-2">${(nInfo.length+nLow.length+nMed.length+nHigh.length+nCrit.length)}</span>
+                                </button>
+                            </h2>
+                            <div id="collapseFTWNuclei" class="accordion-collapse collapse" aria-labelledby="headingFTWNuclei" data-bs-parent="#reconftwArtifactsAccordion">
+                                <div class="accordion-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <div class="section-kv"><strong>Critical</strong> <span class="badge bg-light text-dark">${nCrit.length}</span>
+                                                <div class="mt-2">${nCrit.length ? nCrit.map(x => `<div><code>${escapeHtml(x)}</code></div>`).join('') : '<div class="text-muted">(none)</div>'}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="section-kv"><strong>High</strong> <span class="badge bg-light text-dark">${nHigh.length}</span>
+                                                <div class="mt-2">${nHigh.length ? nHigh.map(x => `<div><code>${escapeHtml(x)}</code></div>`).join('') : '<div class="text-muted">(none)</div>'}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="section-kv"><strong>Medium</strong> <span class="badge bg-light text-dark">${nMed.length}</span>
+                                                <div class="mt-2">${nMed.length ? nMed.map(x => `<div><code>${escapeHtml(x)}</code></div>`).join('') : '<div class="text-muted">(none)</div>'}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="section-kv"><strong>Low</strong> <span class="badge bg-light text-dark">${nLow.length}</span>
+                                                <div class="mt-2">${nLow.length ? nLow.map(x => `<div><code>${escapeHtml(x)}</code></div>`).join('') : '<div class="text-muted">(none)</div>'}</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="section-kv"><strong>Info</strong> <span class="badge bg-light text-dark">${nInfo.length}</span>
+                                                <div class="mt-2">${nInfo.length ? nInfo.slice(0, 200).map(x => `<div><code>${escapeHtml(x)}</code></div>`).join('') : '<div class="text-muted">(none)</div>'}
+                                                ${nInfo.length > 200 ? `<div class="text-muted mt-2">Showing first 200 info findings...</div>` : ''}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingFTWFiles">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFTWFiles" aria-expanded="false" aria-controls="collapseFTWFiles">
+                                    reconFTW Output Files <span class="badge bg-light text-dark ms-2">${outputFiles.length}</span>
+                                </button>
+                            </h2>
+                            <div id="collapseFTWFiles" class="accordion-collapse collapse" aria-labelledby="headingFTWFiles" data-bs-parent="#reconftwArtifactsAccordion">
+                                <div class="accordion-body">
+                                    ${renderOutputFiles(outputFiles)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div>
+                            <h5 class="mb-1">${escapeHtml(domain)}</h5>
+                            <div class="text-muted">
+                                Engine: <strong>${escapeHtml(engine)}</strong>
+                                • Subdomains: <strong>${summary.subdomains || 0}</strong>
+                                • Live endpoints: <strong>${summary.live_endpoints || 0}</strong>
+                                • Webs: <strong>${summary.webs || 0}</strong>
+                                • Nuclei: <strong>${summary.nuclei || 0}</strong>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline-primary btn-sm" onclick="copyJson()"><i class="fas fa-copy"></i> Copy JSON</button>
+                        </div>
+                    </div>
+                </div>
+
+                ${hasReconFTWArtifacts ? renderReconFTWArtifacts(artifacts) : `
+                    <div class="accordion" id="reconAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingSubs">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSubs" aria-expanded="true" aria-controls="collapseSubs">
+                                    Subdomains
+                                </button>
+                            </h2>
+                            <div id="collapseSubs" class="accordion-collapse collapse show" aria-labelledby="headingSubs" data-bs-parent="#reconAccordion">
+                                <div class="accordion-body">
+                                    ${renderSubdomains(results.subdomains)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingDns">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDns" aria-expanded="false" aria-controls="collapseDns">
+                                    DNS Records
+                                </button>
+                            </h2>
+                            <div id="collapseDns" class="accordion-collapse collapse" aria-labelledby="headingDns" data-bs-parent="#reconAccordion">
+                                <div class="accordion-body">
+                                    ${renderDnsRecords(results.dns_records)}
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="headingLive">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLive" aria-expanded="false" aria-controls="collapseLive">
+                                    Live Endpoints
+                                </button>
+                            </h2>
+                            <div id="collapseLive" class="accordion-collapse collapse" aria-labelledby="headingLive" data-bs-parent="#reconAccordion">
+                                <div class="accordion-body">
+                                    ${renderLiveHosts(results.live_hosts)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `}
+            `;
+
+            document.getElementById('resultsCard').style.display = 'block';
+            window.history.pushState({}, '', `/recon/history?recon=${reconId}`);
+        }
+
+        async function viewResults(reconId) {
+            currentReconId = reconId;
+            try {
+                const response = await fetch(`/api/recon/results/${reconId}`);
+                const data = await response.json();
+                if (data.status === 'success') {
+                    displayResults(reconId, data.results || {});
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function hideResults() {
+            document.getElementById('resultsCard').style.display = 'none';
+            window.history.pushState({}, '', '/recon/history');
+        }
+
+        function refreshRecons() {
+            loadRecons();
+        }
+
+        function escapeHtml(str) {
+            return (str || '').toString()
+                .replaceAll('&', '&amp;')
+                .replaceAll('<', '&lt;')
+                .replaceAll('>', '&gt;')
+                .replaceAll('"', '&quot;')
+                .replaceAll("'", '&#039;');
+        }
+
+        function escapeAttr(str) {
+            return escapeHtml(str);
+        }
+
+        async function copyJson() {
+            try {
+                if (!currentResults) return;
+                const text = JSON.stringify(currentResults, null, 2);
+                await navigator.clipboard.writeText(text);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = (allRecons || []).filter(r =>
+                (r.domain || '').toLowerCase().includes(searchTerm) ||
+                (r.scan_id || r.id || '').toString().toLowerCase().includes(searchTerm) ||
+                (r.status || '').toLowerCase().includes(searchTerm)
+            );
+            updateReconsTable(filtered);
+        });
+
+        document.addEventListener('DOMContentLoaded', loadRecons);
+
+        setInterval(() => {
+            const hasRunning = (allRecons || []).some(r => r.status === 'running');
+            if (hasRunning) loadRecons();
+        }, 5000);
+    </script>
+</body>
+</html>

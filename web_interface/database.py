@@ -40,6 +40,13 @@ class ScanManager:
         try:
             collection_name = get_domain_collection_name(scanner.config.get('url', ''))
             collection = self.db[collection_name]
+
+            results_count = getattr(scanner, 'results_count', None)
+            if results_count is None:
+                try:
+                    results_count = len(scanner.results)
+                except Exception:
+                    results_count = 0
             
             # Create scan document
             scan_doc = {
@@ -48,7 +55,7 @@ class ScanManager:
                 'url': scanner.config.get('url', ''),
                 'status': scanner.status,
                 'progress': scanner.progress,
-                'results_count': len(scanner.results),
+                'results_count': results_count,
                 'start_time': scanner.start_time,
                 'end_time': scanner.end_time,
                 'config': scanner.config,
@@ -125,7 +132,7 @@ class ScanManager:
             print(f"Error deleting scan: {e}")
             return False
 
-def get_scan_results(self, scan_id):
+    def get_scan_results(self, scan_id):
         """Get scan results from any domain collection"""
         try:
             collection_names = self.db.list_collection_names()
