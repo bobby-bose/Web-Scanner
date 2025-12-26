@@ -521,6 +521,11 @@ class ReconRunner:
 
 
 def _windows_path_to_wsl(path: str) -> str:
+    # If we're already on a Unix-like filesystem path (e.g. Render/Linux),
+    # there's no concept of drive letters. reconFTW via WSL is Windows-only,
+    # but we defensively avoid crashing on such paths.
+    if isinstance(path, str) and path.startswith('/'):
+        return path
     p = os.path.abspath(path)
     drive, rest = os.path.splitdrive(p)
     if not drive:
@@ -543,6 +548,10 @@ class ReconFTWRunner:
     """ReconFTW runner via WSL (bash)"""
 
     def __init__(self, recon_id: str, config: Dict[str, Any]):
+        # OS detection
+        self.is_windows = platform.system().lower() == 'windows'
+        self.use_wsl = self.is_windows
+
         self.recon_id = recon_id
         self.scan_id = recon_id  # DB compatibility
         self.config = config
@@ -556,13 +565,18 @@ class ReconFTWRunner:
         self.process: subprocess.Popen | None = None
 
         self.output_dir_win = os.path.join(RECON_OUTPUTS_WIN, recon_id)
-        self.output_dir_wsl = _windows_path_to_wsl(self.output_dir_win)
-        self.reconftw_dir_wsl = _windows_path_to_wsl(RECONFTW_FOLDER_WIN)
+        if self.use_wsl:
+            self.output_dir_target = _windows_path_to_wsl(self.output_dir_win)
+            self.reconftw_dir_target = _windows_path_to_wsl(RECONFTW_FOLDER_WIN)
+        else:
+            # Linux/Render: use paths as-is
+            self.output_dir_target = self.output_dir_win
+            self.reconftw_dir_target = RECONFTW_FOLDER_WIN
 
         self.results: Dict[str, Any] = {
             "engine": "reconftw",
             "domain": config.get("domain"),
-            "output_dir": self.output_dir_win,
+            "output_dir": self.output_dir_win,  # keep original for UI consistency
             "artifacts": {},
             "summary": {},
         }
@@ -582,16 +596,24 @@ class ReconFTWRunner:
         else:
             logger.info(f"ReconFTW {self.recon_id}: {message}")
 
-    def _wsl_run(self, bash_cmd: str, timeout: int | None = None) -> subprocess.CompletedProcess:
-        cmd = ["wsl", "bash", "-lc", bash_cmd]
-        self.log_debug(f"WSL cmd: {bash_cmd}")
-        return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+    def _run_bash(self, bash_cmd: str, timeout: int | None = None, capture: bool = True):
+        if self.use_wsl:
+            cmd = ["wsl", "bash", "-lc", bash_cmd]
+            self.log_debug(f"WSL cmd: {bash_cmd}")
+        else:
+            cmd = ["bash", "-lc", bash_cmd]
+            self.log_debug(f"Linux cmd: {bash_cmd}")
+        if capture:
+            return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+        else:
+            # For long-running subprocess
+            return subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
 
     def _preflight_and_autoinstall(self):
         self.log_debug("Preflight: checking reconFTW tools")
-        check_cmd = f"cd {shlex.quote(self.reconftw_dir_wsl)} && ./reconftw.sh --check-tools"
+        check_cmd = f"cd {shlex.quote(self.reconftw_dir_target)} && ./reconftw.sh --check-tools"
         try:
-            proc = self._wsl_run(check_cmd, timeout=600)
+            proc = self._run_bash(check_cmd, timeout=600)
             if proc.returncode == 0:
                 self.log_debug("Preflight OK: tools present")
                 return
@@ -606,8 +628,8 @@ class ReconFTWRunner:
                 raise RuntimeError("Tools missing and auto_install disabled")
 
             # Auto-install (heavy)
-            install_cmd = f"cd {shlex.quote(self.reconftw_dir_wsl)} && chmod +x install.sh reconftw.sh && ./install.sh"
-            proc2 = self._wsl_run(install_cmd, timeout=60 * 60)
+            install_cmd = f"cd {shlex.quote(self.reconftw_dir_target)} && chmod +x install.sh reconftw.sh && ./install.sh"
+            proc2 = self._run_bash(install_cmd, timeout=60 * 60)
             if proc2.stdout:
                 self.log_debug(proc2.stdout.strip()[:2000])
             if proc2.stderr:
@@ -617,7 +639,7 @@ class ReconFTWRunner:
                 raise RuntimeError(f"Auto-install failed (exit {proc2.returncode})")
 
             # Re-check
-            proc3 = self._wsl_run(check_cmd, timeout=600)
+            proc3 = self._run_bash(check_cmd, timeout=600)
             if proc3.returncode != 0:
                 raise RuntimeError("Tools still missing after auto-install")
             self.log_debug("Auto-install complete; tools now present")
@@ -713,22 +735,15 @@ class ReconFTWRunner:
                 flags = "-r"
 
             bash_cmd = (
-                f"cd {shlex.quote(self.reconftw_dir_wsl)} && "
+                f"cd {shlex.quote(self.reconftw_dir_target)} && "
                 f"chmod +x reconftw.sh && "
-                f"./reconftw.sh -d {shlex.quote(domain)} {flags} -o {shlex.quote(self.output_dir_wsl)}/"
+                f"./reconftw.sh -d {shlex.quote(domain)} {flags} -o {shlex.quote(self.output_dir_target)}/"
             )
 
             self.log_debug("ReconFTW: launching scan")
             self.progress = 10
 
-            self.process = subprocess.Popen(
-                ["wsl", "bash", "-lc", bash_cmd],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                text=True,
-                bufsize=1,
-                universal_newlines=True,
-            )
+            self.process = self._run_bash(bash_cmd, capture=False)
 
             last_progress = 10
             if self.process.stdout:
@@ -899,11 +914,6 @@ def start_recon_function():
         recon_id = f"recon_{int(time.time())}_{hash(str(config)) % 10000}"
         engine = (config.get('engine') or 'python').strip().lower()
         if engine == 'reconftw':
-            if platform.system().lower() != 'windows':
-                return jsonify({
-                    "status": "error",
-                    "message": "reconFTW engine requires Windows + WSL. This deployment is not running on Windows. Use the Python engine on Render/Linux.",
-                }), 400
             runner = ReconFTWRunner(recon_id, config)
         else:
             runner = ReconRunner(recon_id, config)
