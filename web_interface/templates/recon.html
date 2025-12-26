@@ -345,11 +345,10 @@
                     <div class="col-md-4">
                         <label for="engine" class="form-label">
                             Engine
-                            <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Python engine is lightweight. reconFTW runs many external tools (Windows+WSL or Linux)."></i>
+                            <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="reconFTW runs all modules inside Docker (full OSINT, subdomains, hosts, web analysis, vulnerability checks)."></i>
                         </label>
                         <select class="form-select" id="engine" name="engine">
-                            <option value="python" selected>Python Engine (Fast)</option>
-                            <option value="reconftw">reconFTW Engine (Full)</option>
+                            <option value="reconftw" selected>reconFTW Engine (Full)</option>
                         </select>
                     </div>
 
@@ -584,14 +583,11 @@
         document.getElementById('reconForm').addEventListener('submit', startRecon);
 
         function updateEngineUI() {
-            const engine = document.getElementById('engine').value;
-            const reconftw = engine === 'reconftw';
-            document.getElementById('reconftwFlagsWrap').style.display = reconftw ? 'block' : 'none';
-            document.getElementById('reconftwInstallWrap').style.display = reconftw ? 'block' : 'none';
-            document.getElementById('pythonModeWrap').style.display = reconftw ? 'none' : 'block';
+            // Only reconFTW engine exists; always show reconFTW fields and hide Python-only fields
+            document.getElementById('reconftwFlagsWrap').style.display = 'block';
+            document.getElementById('reconftwInstallWrap').style.display = 'block';
+            document.getElementById('pythonModeWrap').style.display = 'none';
         }
-
-        document.getElementById('engine').addEventListener('change', updateEngineUI);
 
         document.addEventListener('DOMContentLoaded', function() {
             updateEngineUI();

@@ -545,12 +545,9 @@ def _safe_domain(domain: str) -> str:
 
 
 class ReconFTWRunner:
-    """ReconFTW runner via WSL (bash)"""
+    """ReconFTW runner via Docker (official image). Works on Linux (Render) and Windows (Docker Desktop)."""
 
     def __init__(self, recon_id: str, config: Dict[str, Any]):
-        # OS detection
-        self.is_windows = platform.system().lower() == 'windows'
-        self.use_wsl = self.is_windows
 
         self.recon_id = recon_id
         self.scan_id = recon_id  # DB compatibility
@@ -564,19 +561,15 @@ class ReconFTWRunner:
         self.should_stop = False
         self.process: subprocess.Popen | None = None
 
+        # Output directory (host path for Docker mount)
         self.output_dir_win = os.path.join(RECON_OUTPUTS_WIN, recon_id)
-        if self.use_wsl:
-            self.output_dir_target = _windows_path_to_wsl(self.output_dir_win)
-            self.reconftw_dir_target = _windows_path_to_wsl(RECONFTW_FOLDER_WIN)
-        else:
-            # Linux/Render: use paths as-is
-            self.output_dir_target = self.output_dir_win
-            self.reconftw_dir_target = RECONFTW_FOLDER_WIN
+        # No need for WSL path conversion; Docker works on both Windows and Linux
+        self.output_dir_target = self.output_dir_win
 
         self.results: Dict[str, Any] = {
             "engine": "reconftw",
             "domain": config.get("domain"),
-            "output_dir": self.output_dir_win,  # keep original for UI consistency
+            "output_dir": self.output_dir_win,
             "artifacts": {},
             "summary": {},
         }
@@ -596,56 +589,58 @@ class ReconFTWRunner:
         else:
             logger.info(f"ReconFTW {self.recon_id}: {message}")
 
-    def _run_bash(self, bash_cmd: str, timeout: int | None = None, capture: bool = True):
-        if self.use_wsl:
-            cmd = ["wsl", "bash", "-lc", bash_cmd]
-            self.log_debug(f"WSL cmd: {bash_cmd}")
-        else:
-            cmd = ["bash", "-lc", bash_cmd]
-            self.log_debug(f"Linux cmd: {bash_cmd}")
+    def _ensure_docker(self):
+        """Ensure Docker is installed and running (Linux only)."""
+        self.log_debug("Ensuring Docker is installed")
+        try:
+            # Check if docker is available
+            check = subprocess.run(["docker", "--version"], capture_output=True, text=True, timeout=30)
+            self.log_debug(f"Docker version: {check.stdout.strip()}")
+        except Exception as e:
+            self.log_debug(f"Docker not found or not executable: {e}", "WARNING")
+            # Attempt to install Docker (distro-agnostic)
+            install_cmds = [
+                "apt-get update && apt-get install -y docker.io",
+                "yum install -y docker",
+                "dnf install -y docker",
+            ]
+            for cmd in install_cmds:
+                try:
+                    self.log_debug(f"Attempting Docker install: {cmd}", "INFO")
+                    proc = subprocess.run(["bash", "-lc", cmd], capture_output=True, text=True, timeout=600)
+                    if proc.returncode == 0:
+                        self.log_debug("Docker installed successfully")
+                        break
+                except Exception:
+                    continue
+            else:
+                raise RuntimeError("Failed to install Docker")
+        # Ensure Docker daemon is running (Linux-only)
+        try:
+            subprocess.run(["bash", "-lc", "sudo systemctl start docker || true"], capture_output=True, text=True, timeout=30)
+            subprocess.run(["bash", "-lc", "sudo systemctl enable docker || true"], capture_output=True, text=True, timeout=30)
+        except Exception:
+            pass  # non-systemd or container env; ignore
+        # Final sanity check
+        try:
+            subprocess.run(["docker", "info"], capture_output=True, text=True, timeout=30)
+        except Exception as e:
+            raise RuntimeError(f"Docker daemon not available after install: {e}")
+
+    def _run_docker(self, docker_cmd: str, timeout: int | None = None, capture: bool = True):
+        """Run a docker command; for long-running scans set capture=False to stream logs."""
+        self.log_debug(f"Docker cmd: docker {docker_cmd}")
         if capture:
-            return subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
+            return subprocess.run(["docker"] + docker_cmd.split(), capture_output=True, text=True, timeout=timeout)
         else:
             # For long-running subprocess
-            return subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
+            full_cmd = ["docker"] + docker_cmd.split()
+            return subprocess.Popen(full_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
 
     def _preflight_and_autoinstall(self):
-        self.log_debug("Preflight: checking reconFTW tools")
-        check_cmd = f"cd {shlex.quote(self.reconftw_dir_target)} && ./reconftw.sh --check-tools"
-        try:
-            proc = self._run_bash(check_cmd, timeout=600)
-            if proc.returncode == 0:
-                self.log_debug("Preflight OK: tools present")
-                return
-
-            self.log_debug("Tools missing or check failed; attempting auto-install", "WARNING")
-            if proc.stdout:
-                self.log_debug(proc.stdout.strip()[:2000], "WARNING")
-            if proc.stderr:
-                self.log_debug(proc.stderr.strip()[:2000], "WARNING")
-
-            if self.config.get("auto_install", True) is not True:
-                raise RuntimeError("Tools missing and auto_install disabled")
-
-            # Auto-install (heavy)
-            install_cmd = f"cd {shlex.quote(self.reconftw_dir_target)} && chmod +x install.sh reconftw.sh && ./install.sh"
-            proc2 = self._run_bash(install_cmd, timeout=60 * 60)
-            if proc2.stdout:
-                self.log_debug(proc2.stdout.strip()[:2000])
-            if proc2.stderr:
-                self.log_debug(proc2.stderr.strip()[:2000], "WARNING")
-
-            if proc2.returncode != 0:
-                raise RuntimeError(f"Auto-install failed (exit {proc2.returncode})")
-
-            # Re-check
-            proc3 = self._run_bash(check_cmd, timeout=600)
-            if proc3.returncode != 0:
-                raise RuntimeError("Tools still missing after auto-install")
-            self.log_debug("Auto-install complete; tools now present")
-
-        except subprocess.TimeoutExpired:
-            raise RuntimeError("Preflight/install timed out")
+        self.log_debug("Preflight: ensuring Docker is installed")
+        self._ensure_docker()
+        self.log_debug("Preflight OK: Docker available")
 
     def _read_text_file(self, rel_path: str, limit_lines: int = 5000) -> List[str]:
         p = os.path.join(self.output_dir_win, rel_path)
@@ -728,22 +723,26 @@ class ReconFTWRunner:
                 self.end_time = datetime.now()
                 return
 
-            # Run reconftw
+            # Run reconftw inside Docker
             flags = self.config.get('reconftw_flags') or "-r"
             # restrict flags to a safe subset (avoid arbitrary injection)
             if not isinstance(flags, str) or not re.fullmatch(r"[\w\s\-\.]+", flags.strip()):
                 flags = "-r"
 
-            bash_cmd = (
-                f"cd {shlex.quote(self.reconftw_dir_target)} && "
-                f"chmod +x reconftw.sh && "
-                f"./reconftw.sh -d {shlex.quote(domain)} {flags} -o {shlex.quote(self.output_dir_target)}/"
+            # Ensure output directory exists
+            os.makedirs(self.output_dir_win, exist_ok=True)
+
+            # Docker run command (mount output dir)
+            # We use the official reconftw/reconftw image and mount host output dir to /reconftw/outputs
+            docker_cmd = (
+                f"run --rm -v {self.output_dir_win}:/reconftw/outputs "
+                f"reconftw/reconftw:latest -d {shlex.quote(domain)} {flags.strip()} -o /reconftw/outputs/"
             )
 
-            self.log_debug("ReconFTW: launching scan")
+            self.log_debug("ReconFTW: launching Docker scan")
             self.progress = 10
 
-            self.process = self._run_bash(bash_cmd, capture=False)
+            self.process = self._run_docker(docker_cmd, capture=False)
 
             last_progress = 10
             if self.process.stdout:
@@ -912,11 +911,13 @@ def start_recon_function():
                 pass
 
         recon_id = f"recon_{int(time.time())}_{hash(str(config)) % 10000}"
-        engine = (config.get('engine') or 'python').strip().lower()
-        if engine == 'reconftw':
-            runner = ReconFTWRunner(recon_id, config)
-        else:
-            runner = ReconRunner(recon_id, config)
+        engine = (config.get('engine') or 'reconftw').strip().lower()
+        if engine != 'reconftw':
+            return jsonify({
+                "status": "error",
+                "message": "Only reconFTW engine is supported.",
+            }), 400
+        runner = ReconFTWRunner(recon_id, config)
         active_recons[recon_id] = runner
 
         def recon_thread():
