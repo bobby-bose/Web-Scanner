@@ -149,3 +149,11 @@
 2025-12-26 14:55:55,709 - Web-Scanner_web - INFO - <module>:96 - Database initialized successfully
 2025-12-26 14:55:55,717 - Web-Scanner_web - INFO - <module>:1294 - Starting Flask development server - Direct Scan Mode
 2025-12-26 14:55:57,564 - Web-Scanner_web - INFO - <module>:1298 - Database initialized successfully
+2025-12-26 15:09:58,114 - Web-Scanner_web - INFO - <module>:76 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 15:10:01,186 - Web-Scanner_web - INFO - <module>:96 - Database initialized successfully
+2025-12-26 15:10:01,193 - Web-Scanner_web - INFO - <module>:1277 - Starting Flask development server - Direct Scan Mode
+2025-12-26 15:10:03,053 - Web-Scanner_web - INFO - <module>:1281 - Database initialized successfully
+2025-12-26 15:16:27,004 - Web-Scanner_web - INFO - <module>:76 - Starting Web-ScannerWeb Interface - Direct Scan Mode
+2025-12-26 15:16:32,324 - Web-Scanner_web - INFO - <module>:96 - Database initialized successfully
+2025-12-26 15:16:32,334 - Web-Scanner_web - INFO - <module>:1282 - Starting Flask development server - Direct Scan Mode
+2025-12-26 15:16:35,000 - Web-Scanner_web - INFO - <module>:1286 - Database initialized successfully

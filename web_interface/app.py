@@ -104,12 +104,25 @@ active_scans: Dict[str, 'DirectScanner'] = {}
 scan_history: List[Dict[str, Any]] = []
 scan_results: Dict[str, List[Dict[str, Any]]] = {}
 
-# Global recon storage
-active_recons: Dict[str, 'ReconRunner'] = {}
+# Global state for active recon runs
+active_recons: Dict[str, ReconRunner | ReconFTWRunner] = {}
+
+# Global state for recon preparation
+recon_preparing = False
+recon_ready = False
+recon_prepare_logs: List[Dict[str, Any]] = []
+RECON_READY_FILE = os.path.join(RECON_OUTPUTS_WIN, ".recon_ready")
 
 # reconFTW runner settings
 RECONFTW_FOLDER_WIN = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'reconftw'))
 RECON_OUTPUTS_WIN = os.path.normpath(os.path.join(os.path.dirname(__file__), 'recon_outputs'))
+
+# Initialize recon_ready from file flag
+def _load_recon_ready_state():
+    global recon_ready
+    recon_ready = os.path.isfile(RECON_READY_FILE)
+
+_load_recon_ready_state()
 
 class DirectScanner:
     """Direct scanner - no initialization, imports modules on demand"""
@@ -545,7 +558,7 @@ def _safe_domain(domain: str) -> str:
 
 
 class ReconFTWRunner:
-    """ReconFTW runner via Docker (official image). Works on Linux (Render) and Windows (Docker Desktop)."""
+    """ReconFTW runner natively on Linux (Render). Downloads/updates reconFTW repo, installs tools, runs reconftw.sh."""
 
     def __init__(self, recon_id: str, config: Dict[str, Any]):
 
@@ -561,10 +574,9 @@ class ReconFTWRunner:
         self.should_stop = False
         self.process: subprocess.Popen | None = None
 
-        # Output directory (host path for Docker mount)
+        # Paths
         self.output_dir_win = os.path.join(RECON_OUTPUTS_WIN, recon_id)
-        # No need for WSL path conversion; Docker works on both Windows and Linux
-        self.output_dir_target = self.output_dir_win
+        self.reconftw_dir_target = RECONFTW_FOLDER_WIN
 
         self.results: Dict[str, Any] = {
             "engine": "reconftw",
@@ -589,58 +601,18 @@ class ReconFTWRunner:
         else:
             logger.info(f"ReconFTW {self.recon_id}: {message}")
 
-    def _ensure_docker(self):
-        """Ensure Docker is installed and running (Linux only)."""
-        self.log_debug("Ensuring Docker is installed")
-        try:
-            # Check if docker is available
-            check = subprocess.run(["docker", "--version"], capture_output=True, text=True, timeout=30)
-            self.log_debug(f"Docker version: {check.stdout.strip()}")
-        except Exception as e:
-            self.log_debug(f"Docker not found or not executable: {e}", "WARNING")
-            # Attempt to install Docker (distro-agnostic)
-            install_cmds = [
-                "apt-get update && apt-get install -y docker.io",
-                "yum install -y docker",
-                "dnf install -y docker",
-            ]
-            for cmd in install_cmds:
-                try:
-                    self.log_debug(f"Attempting Docker install: {cmd}", "INFO")
-                    proc = subprocess.run(["bash", "-lc", cmd], capture_output=True, text=True, timeout=600)
-                    if proc.returncode == 0:
-                        self.log_debug("Docker installed successfully")
-                        break
-                except Exception:
-                    continue
-            else:
-                raise RuntimeError("Failed to install Docker")
-        # Ensure Docker daemon is running (Linux-only)
-        try:
-            subprocess.run(["bash", "-lc", "sudo systemctl start docker || true"], capture_output=True, text=True, timeout=30)
-            subprocess.run(["bash", "-lc", "sudo systemctl enable docker || true"], capture_output=True, text=True, timeout=30)
-        except Exception:
-            pass  # non-systemd or container env; ignore
-        # Final sanity check
-        try:
-            subprocess.run(["docker", "info"], capture_output=True, text=True, timeout=30)
-        except Exception as e:
-            raise RuntimeError(f"Docker daemon not available after install: {e}")
-
-    def _run_docker(self, docker_cmd: str, timeout: int | None = None, capture: bool = True):
-        """Run a docker command; for long-running scans set capture=False to stream logs."""
-        self.log_debug(f"Docker cmd: docker {docker_cmd}")
+    def _run_bash(self, bash_cmd: str, timeout: int | None = None, capture: bool = True):
+        """Run a bash command; for long-running scans set capture=False to stream logs."""
+        self.log_debug(f"Linux cmd: {bash_cmd}")
         if capture:
-            return subprocess.run(["docker"] + docker_cmd.split(), capture_output=True, text=True, timeout=timeout)
+            return subprocess.run(["bash", "-lc", bash_cmd], capture_output=True, text=True, timeout=timeout)
         else:
             # For long-running subprocess
-            full_cmd = ["docker"] + docker_cmd.split()
-            return subprocess.Popen(full_cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
+            return subprocess.Popen(["bash", "-lc", bash_cmd], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
 
     def _preflight_and_autoinstall(self):
-        self.log_debug("Preflight: ensuring Docker is installed")
-        self._ensure_docker()
-        self.log_debug("Preflight OK: Docker available")
+        """No-op: tools are installed via /api/recon/prepare."""
+        self.log_debug("Preflight: skipping (tools should be ready via prepare step)")
 
     def _read_text_file(self, rel_path: str, limit_lines: int = 5000) -> List[str]:
         p = os.path.join(self.output_dir_win, rel_path)
@@ -723,7 +695,7 @@ class ReconFTWRunner:
                 self.end_time = datetime.now()
                 return
 
-            # Run reconftw inside Docker
+            # Run reconftw natively
             flags = self.config.get('reconftw_flags') or "-r"
             # restrict flags to a safe subset (avoid arbitrary injection)
             if not isinstance(flags, str) or not re.fullmatch(r"[\w\s\-\.]+", flags.strip()):
@@ -732,17 +704,17 @@ class ReconFTWRunner:
             # Ensure output directory exists
             os.makedirs(self.output_dir_win, exist_ok=True)
 
-            # Docker run command (mount output dir)
-            # We use the official reconftw/reconftw image and mount host output dir to /reconftw/outputs
-            docker_cmd = (
-                f"run --rm -v {self.output_dir_win}:/reconftw/outputs "
-                f"reconftw/reconftw:latest -d {shlex.quote(domain)} {flags.strip()} -o /reconftw/outputs/"
+            # Run reconftw.sh
+            bash_cmd = (
+                f"cd {shlex.quote(self.reconftw_dir_target)} && "
+                f"chmod +x reconftw.sh && "
+                f"./reconftw.sh -d {shlex.quote(domain)} {flags.strip()} -o {shlex.quote(self.output_dir_win)}/"
             )
 
-            self.log_debug("ReconFTW: launching Docker scan")
+            self.log_debug("ReconFTW: launching scan")
             self.progress = 10
 
-            self.process = self._run_docker(docker_cmd, capture=False)
+            self.process = self._run_bash(bash_cmd, capture=False)
 
             last_progress = 10
             if self.process.stdout:
@@ -895,9 +867,104 @@ def start_scan_function():
         }), 500
 
 
+@app.route('/api/recon/prepare', methods=['POST'])
+def prepare_recon():
+    global recon_preparing, recon_ready, recon_prepare_logs
+    logger.info("Prepare recon API called")
+    if recon_preparing:
+        return jsonify({
+            "status": "running",
+            "message": "Preparation already in progress",
+            "logs": recon_prepare_logs[-50:]  # last 50 logs
+        }), 200
+    if recon_ready:
+        return jsonify({
+            "status": "ready",
+            "message": "reconFTW tools are already installed and ready",
+            "logs": recon_prepare_logs[-50:]
+        }), 200
+
+    recon_preparing = True
+    recon_ready = False
+    recon_prepare_logs = []
+    os.makedirs(RECON_OUTPUTS_WIN, exist_ok=True)
+
+    def prepare_thread():
+        global recon_preparing, recon_ready, recon_prepare_logs
+        try:
+            def log(msg, level="INFO"):
+                entry = {"timestamp": datetime.now().isoformat(), "level": level, "message": msg}
+                recon_prepare_logs.append(entry)
+                logger.info(f"[PREPARE] {msg}")
+
+            log("Starting reconFTW preparation")
+            # Ensure reconFTW repo exists
+            os.makedirs(RECONFTW_FOLDER_WIN, exist_ok=True)
+            if not os.path.exists(os.path.join(RECONFTW_FOLDER_WIN, "reconftw.sh")):
+                log("Cloning reconFTW repo")
+                clone_cmd = f"cd {shlex.quote(os.path.dirname(RECONFTW_FOLDER_WIN))} && git clone https://github.com/six2dez/reconftw.git {shlex.quote(os.path.basename(RECONFTW_FOLDER_WIN))}"
+                proc = subprocess.run(["bash", "-lc", clone_cmd], capture_output=True, text=True, timeout=300)
+                if proc.returncode != 0:
+                    log(f"Failed to clone reconFTW repo: {proc.stderr.strip()[:500]}", "ERROR")
+                    raise RuntimeError("Repo clone failed")
+            else:
+                log("Updating reconFTW repo")
+                update_cmd = f"cd {shlex.quote(RECONFTW_FOLDER_WIN)} && git pull"
+                proc = subprocess.run(["bash", "-lc", update_cmd], capture_output=True, text=True, timeout=120)
+                # ignore pull errors
+
+            log("Running reconFTW install (may take 10-30 minutes)")
+            install_cmd = f"cd {shlex.quote(RECONFTW_FOLDER_WIN)} && chmod +x install.sh reconftw.sh && ./install.sh"
+            process = subprocess.Popen(["bash", "-lc", install_cmd], stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1, universal_newlines=True)
+            for line in process.stdout:
+                line = (line or "").rstrip()
+                if line:
+                    log(line)
+            process.wait()
+            if process.returncode == 0:
+                log("reconFTW install completed successfully")
+                # Create ready flag file
+                with open(RECON_READY_FILE, "w") as f:
+                    f.write(datetime.now().isoformat())
+                recon_ready = True
+                log("Everything is ready!")
+            else:
+                log(f"Install failed with exit code {process.returncode}", "ERROR")
+                raise RuntimeError("Install failed")
+        except Exception as e:
+            log(f"Preparation failed: {e}", "ERROR")
+        finally:
+            recon_preparing = False
+
+    threading.Thread(target=prepare_thread, daemon=True).start()
+    return jsonify({
+        "status": "started",
+        "message": "Preparation started",
+        "logs": recon_prepare_logs
+    }), 202
+
+@app.route('/api/recon/prepare/status', methods=['GET'])
+def prepare_status():
+    return jsonify({
+        "preparing": recon_preparing,
+        "ready": recon_ready,
+        "logs": recon_prepare_logs[-200:]  # last 200 logs
+    })
+@app.route('/api/recon/ready-status', methods=['GET'])
+def ready_status():
+    return jsonify({
+        "ready": recon_ready,
+        "preparing": recon_preparing
+    })
+
 @app.route('/api/recon/start', methods=['POST'])
 def start_recon_function():
     logger.info("Start recon API called")
+    if not recon_ready:
+        return jsonify({
+            "status": "error",
+            "message": "reconFTW tools are not ready. Click 'Get Ready' first."
+        }), 429
     try:
         config = request.get_json() or {}
         logger.info(f"Start recon config: {config}")

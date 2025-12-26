@@ -327,6 +327,22 @@
         </div>
 
         <div class="form-container fade-in">
+            <div id="prepareSection" class="mb-4">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h5 class="mb-0">Preparation</h5>
+                    <button id="prepareBtn" class="btn btn-primary">
+                        <i class="fas fa-cog"></i> Get Ready
+                    </button>
+                </div>
+                <div id="prepareStatus" class="alert alert-info d-none">
+                    <div class="d-flex align-items-center">
+                        <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+                        <span id="prepareStatusText">Preparing...</span>
+                    </div>
+                </div>
+                <div id="prepareLogs" class="mt-2 bg-dark text-light p-2 rounded" style="max-height: 300px; overflow-y: auto; font-family: monospace; font-size: 0.85rem; display: none;"></div>
+            </div>
+
             <form id="reconForm">
                 <div class="row g-3">
                     <div class="col-md-12">
@@ -338,16 +354,16 @@
                             <span class="input-group-text" style="background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); color: white; border: none;">
                                 <i class="fas fa-globe"></i>
                             </span>
-                            <input type="text" class="form-control" id="domain" name="domain" placeholder="example.com" required>
+                            <input type="text" class="form-control" id="domain" name="domain" placeholder="example.com" required disabled>
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <label for="engine" class="form-label">
                             Engine
-                            <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="reconFTW runs all modules inside Docker (full OSINT, subdomains, hosts, web analysis, vulnerability checks)."></i>
+                            <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="reconFTW runs all modules natively on Linux (full OSINT, subdomains, hosts, web analysis, vulnerability checks)."></i>
                         </label>
-                        <select class="form-select" id="engine" name="engine">
+                        <select class="form-select" id="engine" name="engine" disabled>
                             <option value="reconftw" selected>reconFTW Engine (Full)</option>
                         </select>
                     </div>
@@ -357,7 +373,7 @@
                             Threads
                             <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Concurrency for probing hosts"></i>
                         </label>
-                        <input type="number" class="form-control" id="threads" name="threads" value="20" min="1" max="200">
+                        <input type="number" class="form-control" id="threads" name="threads" value="20" min="1" max="200" disabled>
                     </div>
 
                     <div class="col-md-4">
@@ -365,7 +381,7 @@
                             Max Hosts
                             <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Probe only the first N discovered subdomains to keep scans fast"></i>
                         </label>
-                        <input type="number" class="form-control" id="max_hosts" name="max_hosts" value="200" min="1" max="5000">
+                        <input type="number" class="form-control" id="max_hosts" name="max_hosts" value="200" min="1" max="5000" disabled>
                     </div>
 
                     <div class="col-md-4" id="pythonModeWrap">
@@ -373,7 +389,7 @@
                             Mode
                             <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Python engine supports passive discovery via certificate transparency + probing"></i>
                         </label>
-                        <select class="form-select" id="mode" name="mode">
+                        <select class="form-select" id="mode" name="mode" disabled>
                             <option value="passive" selected>Passive (CT + DNS + Probe)</option>
                         </select>
                     </div>
@@ -383,13 +399,13 @@
                             reconFTW Flags
                             <i class="fas fa-info-circle tooltip-icon" data-bs-toggle="tooltip" title="Default is -r (full). Example: -r --deep"></i>
                         </label>
-                        <input type="text" class="form-control" id="reconftw_flags" name="reconftw_flags" value="-r" placeholder="-r">
+                        <input type="text" class="form-control" id="reconftw_flags" name="reconftw_flags" value="-r" placeholder="-r" disabled>
                     </div>
 
                     <div class="col-md-4" id="reconftwInstallWrap" style="display:none;">
                         <label class="form-label">Auto Install Tools</label>
                         <div class="form-check mt-2">
-                            <input class="form-check-input" type="checkbox" id="auto_install" name="auto_install" checked>
+                            <input class="form-check-input" type="checkbox" id="auto_install" name="auto_install" checked disabled>
                             <label class="form-check-label" for="auto_install">
                                 Run <code>install.sh</code> automatically if tools are missing
                             </label>
@@ -398,7 +414,7 @@
                 </div>
 
                 <div class="d-flex gap-2 mt-3">
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" class="btn btn-primary" id="startBtn" disabled>
                         <i class="fas fa-play"></i> Start Recon
                     </button>
                     <a href="/recon/history" class="btn btn-outline-secondary">
@@ -455,13 +471,15 @@
     <script>
         let currentReconId = null;
         let statusInterval = null;
+        let prepareInterval = null;
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        function appendLogLine(entry) {
-            const container = document.getElementById('verboseOutput');
+        function appendLogLine(entry, containerId = 'verboseOutput') {
+            const container = document.getElementById(containerId);
+            if (!container) return;
             const line = document.createElement('div');
             line.className = 'verbose-line';
             if (entry.level && entry.level.toLowerCase() === 'error') line.classList.add('error');
@@ -472,10 +490,100 @@
             container.parentElement.scrollTop = container.parentElement.scrollHeight;
         }
 
-        function resetLogs() {
-            const container = document.getElementById('verboseOutput');
-            container.innerHTML = '';
+        function resetLogs(containerId = 'verboseOutput') {
+            const container = document.getElementById(containerId);
+            if (container) container.innerHTML = '';
         }
+
+        function setFormEnabled(enabled) {
+            const inputs = document.querySelectorAll('#reconForm input, #reconForm select, #reconForm button');
+            inputs.forEach(el => {
+                if (el.id !== 'prepareBtn') {
+                    el.disabled = !enabled;
+                }
+            });
+        }
+
+        async function checkReadyState() {
+            try {
+                const resp = await fetch('/api/recon/ready-status');
+                const data = await resp.json();
+                if (data.ready) {
+                    document.getElementById('prepareBtn').textContent = 'Ready';
+                    document.getElementById('prepareBtn').disabled = true;
+                    document.getElementById('prepareBtn').className = 'btn btn-success';
+                    document.getElementById('prepareStatus').classList.add('d-none');
+                    document.getElementById('prepareLogs').style.display = 'none';
+                    setFormEnabled(true);
+                } else if (data.preparing) {
+                    document.getElementById('prepareBtn').disabled = true;
+                    document.getElementById('prepareStatus').classList.remove('d-none');
+                    document.getElementById('prepareLogs').style.display = 'block';
+                    setFormEnabled(false);
+                    // Poll prepare logs
+                    if (!prepareInterval) {
+                        prepareInterval = setInterval(loadPrepareStatus, 2000);
+                    }
+                } else {
+                    document.getElementById('prepareBtn').textContent = 'Get Ready';
+                    document.getElementById('prepareBtn').disabled = false;
+                    document.getElementById('prepareBtn').className = 'btn btn-primary';
+                    document.getElementById('prepareStatus').classList.add('d-none');
+                    document.getElementById('prepareLogs').style.display = 'none';
+                    setFormEnabled(false);
+                }
+            } catch (e) {
+                console.error('Failed to check ready state', e);
+            }
+        }
+
+        async function startPrepare() {
+            try {
+                const resp = await fetch('/api/recon/prepare', { method: 'POST' });
+                const data = await resp.json();
+                if (data.status === 'ready') {
+                    // Already ready
+                    await checkReadyState();
+                } else if (data.status === 'started') {
+                    // Started, poll status
+                    await checkReadyState();
+                } else {
+                    alert('Failed to start preparation: ' + (data.message || 'Unknown error'));
+                }
+            } catch (e) {
+                console.error('Prepare error', e);
+                alert('Failed to start preparation');
+            }
+        }
+
+        async function loadPrepareStatus() {
+            try {
+                const resp = await fetch('/api/recon/prepare/status');
+                const data = await resp.json();
+                if (data.ready) {
+                    if (prepareInterval) {
+                        clearInterval(prepareInterval);
+                        prepareInterval = null;
+                    }
+                    await checkReadyState();
+                } else if (data.preparing) {
+                    document.getElementById('prepareStatusText').textContent = 'Installing tools...';
+                    // Render logs
+                    resetLogs('prepareLogs');
+                    (data.logs || []).forEach(entry => appendLogLine(entry, 'prepareLogs'));
+                } else {
+                    if (prepareInterval) {
+                        clearInterval(prepareInterval);
+                        prepareInterval = null;
+                    }
+                    await checkReadyState();
+                }
+            } catch (e) {
+                console.error('Prepare status error', e);
+            }
+        }
+
+        document.getElementById('prepareBtn').addEventListener('click', startPrepare);
 
         async function startRecon(event) {
             event.preventDefault();
@@ -487,9 +595,6 @@
                     config[key] = value;
                 }
             }
-
-            // Handle checkboxes
-            config.auto_install = document.getElementById('auto_install') ? document.getElementById('auto_install').checked : true;
 
             // convert numeric fields
             if (config.threads) config.threads = parseInt(config.threads, 10);
@@ -595,6 +700,8 @@
             tooltipTriggerList.map(function (tooltipTriggerEl) {
                 return new bootstrap.Tooltip(tooltipTriggerEl);
             });
+            // Check ready state on load
+            checkReadyState();
         });
     </script>
 </body>
