@@ -111,11 +111,11 @@ active_recons: Dict[str, Any] = {}
 recon_preparing = False
 recon_ready = False
 recon_prepare_logs: List[Dict[str, Any]] = []
-RECON_READY_FILE = os.path.join(RECON_OUTPUTS_WIN, ".recon_ready")
 
 # reconFTW runner settings
 RECONFTW_FOLDER_WIN = os.path.normpath(os.path.join(os.path.dirname(__file__), '..', 'reconftw'))
 RECON_OUTPUTS_WIN = os.path.normpath(os.path.join(os.path.dirname(__file__), 'recon_outputs'))
+RECON_READY_FILE = os.path.join(RECON_OUTPUTS_WIN, ".recon_ready")
 
 # Initialize recon_ready from file flag
 def _load_recon_ready_state():
