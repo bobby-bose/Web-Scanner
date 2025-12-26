@@ -128,3 +128,4 @@
 2025-12-26 14:32:21,246 - Web-Scanner_web - INFO - <module>:75 - Starting Web-ScannerWeb Interface - Direct Scan Mode
 2025-12-26 14:32:23,942 - Web-Scanner_web - INFO - <module>:95 - Database initialized successfully
 2025-12-26 14:32:23,948 - Web-Scanner_web - INFO - <module>:1269 - Starting Flask development server - Direct Scan Mode
+2025-12-26 14:32:25,602 - Web-Scanner_web - INFO - <module>:1273 - Database initialized successfully

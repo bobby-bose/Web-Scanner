@@ -349,7 +349,7 @@
                         </label>
                         <select class="form-select" id="engine" name="engine">
                             <option value="python" selected>Python Engine (Fast)</option>
-                            <option value="reconftw">reconFTW Engine (WSL)</option>
+                            <option value="reconftw" id="reconftwOption">reconFTW Engine (WSL)</option>
                         </select>
                     </div>
 
@@ -591,9 +591,28 @@
             document.getElementById('pythonModeWrap').style.display = reconftw ? 'none' : 'block';
         }
 
+        function applyPlatformRestrictions() {
+            // reconFTW runner is Windows+WSL only; disable option for other platforms.
+            // This is a best-effort UI guard; server enforces it too.
+            try {
+                const isWindows = (navigator.userAgent || '').toLowerCase().includes('windows');
+                const opt = document.getElementById('reconftwOption');
+                if (opt && !isWindows) {
+                    opt.disabled = true;
+                    opt.textContent = 'reconFTW Engine (Windows/WSL only)';
+                    if (document.getElementById('engine').value === 'reconftw') {
+                        document.getElementById('engine').value = 'python';
+                    }
+                }
+            } catch (e) {
+                // ignore
+            }
+        }
+
         document.getElementById('engine').addEventListener('change', updateEngineUI);
 
         document.addEventListener('DOMContentLoaded', function() {
+            applyPlatformRestrictions();
             updateEngineUI();
             const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
             tooltipTriggerList.map(function (tooltipTriggerEl) {

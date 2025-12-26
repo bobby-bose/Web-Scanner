@@ -28,6 +28,7 @@ from bs4 import BeautifulSoup
 import subprocess
 import shlex
 from pathlib import Path
+import platform
 
 # Add web-scanner to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
@@ -887,9 +888,22 @@ def start_recon_function():
         config = request.get_json() or {}
         logger.info(f"Start recon config: {config}")
 
+        # Normalize domain early so both engines receive consistent values
+        if isinstance(config.get('domain'), str):
+            try:
+                config['domain'] = _safe_domain(config.get('domain'))
+            except Exception:
+                # Let the runner validate and report in its own error path
+                pass
+
         recon_id = f"recon_{int(time.time())}_{hash(str(config)) % 10000}"
         engine = (config.get('engine') or 'python').strip().lower()
         if engine == 'reconftw':
+            if platform.system().lower() != 'windows':
+                return jsonify({
+                    "status": "error",
+                    "message": "reconFTW engine requires Windows + WSL. This deployment is not running on Windows. Use the Python engine on Render/Linux.",
+                }), 400
             runner = ReconFTWRunner(recon_id, config)
         else:
             runner = ReconRunner(recon_id, config)
